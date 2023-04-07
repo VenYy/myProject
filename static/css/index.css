@@ -1,0 +1,77 @@
+body {
+    margin: 0 auto;
+    padding: 0;
+    background-color: #C8D2D8;
+}
+
+.sidebar {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgb(220, 238, 251);
+}
+
+.logo {
+    padding-left: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    color: #303030;
+    font-size: 20px;
+    font-weight: bold;
+
+    border-bottom: 1px solid #ccc;
+
+}
+
+.logo img {
+    width: 20%;
+    height: 20%;
+
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.sidebar a {
+    padding: 16px 16px 16px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #303030;
+    display: block;
+    transition: 0.3s;
+}
+
+
+.index {
+    margin-top: 20px;
+}
+
+.index a:hover {
+    background-color: #d9961d;
+}
+
+.icon {
+    width: 15%;
+    height: 15%;
+    padding-right: 15px;
+
+    /*icon图标和文字对齐*/
+    display: inline-block;
+    vertical-align: top;
+}
+
+.main {
+    position: absolute;
+    float: left;
+    left: 210px;
+    width: 1200px;
+    height: 100%;
+}
+
+.main .hot_search {
+    top: 20px;
+    width: 600px;
+    height: 400px;
+}
