@@ -27,16 +27,31 @@ def hotSearch_bar(data):
     return bar
 
 
-@app.route('/', methods=["GET", "POST"])
-def hello_world():
-    return render_template("index.html")
-
-
 @app.route("/hotSearchData")
 def get_hotSearch_bar():
     data = pd.read_csv("spider/weibo/files/hot_band_bak.csv", encoding="utf-8")
     c = hotSearch_bar(data)
     return c.dump_options_with_quotes()
+
+# 实现页面跳转
+
+@app.route('/', methods=["GET", "POST"])
+def hello_world():
+    return render_template("index.html")
+
+@app.route("/hotSearchPage")
+def hotSearchPage():
+    return render_template("hotsearch.html")
+
+
+@app.route("/topicPage")
+def topicPage():
+    return render_template("topic.html")
+
+
+@app.route("/othersPage")
+def othersPage():
+    return render_template("others.html")
 
 
 if __name__ == '__main__':
