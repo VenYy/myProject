@@ -1,0 +1,71 @@
+.topics {
+    left: 75px;
+    width: 1500px;
+
+    /*控制div展示范围*/
+    /*height: 500px;*/
+    /*overflow-y: auto;*/
+
+
+    /*background-color: #ccc;*/
+    position: absolute;
+}
+
+.topic {
+    width: 300px;
+    height: 200px;
+    margin: 40px 30px 40px 40px;
+    float: left;
+
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: darkgray 5px 5px 20px 5px;
+
+    /*背景渐变过度效果*/
+    background: linear-gradient(to right, white, dodgerblue, wheat);
+    background-size: 200%;
+    transition: background-position 0.5s;
+
+
+}
+
+.topic:hover {
+    background-position: 100% 0;
+}
+
+.topic a {
+    text-decoration: none;
+    color: #0d1244;
+}
+
+
+#word {
+    font-size: 18px;
+    font-weight: bolder;
+    /*padding: 0 25px;*/
+}
+
+#summary {
+    font-size: 12px;
+    color: #303030;
+    padding: 0 20px;
+
+    /*限制显示文本的行数*/
+    -webkit-line-clamp:4;
+    /*排列方式*/
+    -webkit-box-orient: vertical;
+    /*将对象作为弹性伸缩盒子模型*/
+    display: -webkit-box;
+    /*超出限制的宽度就隐藏内容*/
+    overflow: hidden;
+}
+
+#talk {
+    color: #303030;
+    padding: 0 20px;
+}
+
+#read {
+    color: #303030;
+    padding: 0 20px;
+}

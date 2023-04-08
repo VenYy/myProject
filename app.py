@@ -1,8 +1,9 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, jsonify
 from pyecharts.charts import Bar, Timeline, Grid
 from pyecharts import options
 from pyecharts.globals import ThemeType
 import pandas as pd
+import json
 
 app = Flask(__name__)
 
@@ -33,6 +34,12 @@ def get_hotSearch_bar():
     c = hotSearch_bar(data)
     return c.dump_options_with_quotes()
 
+
+@app.route("/topicData")
+def topicData():
+    with open("spider/weibo/files/topic_band.json", "r") as f:
+        data = json.load(f)
+        return data
 # 实现页面跳转
 
 @app.route('/', methods=["GET", "POST"])

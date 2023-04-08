@@ -6,7 +6,7 @@ body {
 
 .sidebar {
     height: 100%;
-    width: 200px;
+    width: 250px;
     position: fixed;
     top: 0;
     left: 0;
@@ -19,7 +19,7 @@ body {
     padding-bottom: 20px;
 
     color: #303030;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
 
     border-bottom: 1px solid #ccc;
@@ -37,10 +37,11 @@ body {
 .sidebar a {
     padding: 16px 16px 16px 20px;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 23px;
     color: #303030;
     display: block;
     transition: 0.3s;
+    vertical-align: text-bottom;
 }
 
 
@@ -59,14 +60,14 @@ body {
 
     /*icon图标和文字对齐*/
     display: inline-block;
-    vertical-align: top;
+    vertical-align: text-bottom;
 }
 
 .main {
     position: absolute;
     float: left;
-    left: 210px;
-    width: 1200px;
+    left: 260px;
+    width: 1650px;
     height: 100%;
 }
 
