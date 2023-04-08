@@ -4,7 +4,7 @@ function hot_search() {
 
     $.ajax({
         type: "GET",
-        url: "http://127.0.0.1:5000/hotSearch",
+        url: "http://127.0.0.1:5000/hotSearchData",
         dataType: "json",
         success: function (data) {
             console.log(data)
