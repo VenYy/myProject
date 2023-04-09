@@ -1,3 +1,50 @@
+.searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+    margin-left: 120px;
+    margin-top: 30px;
+    width: 500px;
+    height: 50px;
+    line-height: 50px;
+}
+.searchBar input {
+    flex: 1;
+    height: 50px;
+    line-height: 50px;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding: 0 20px;
+    transition: all .3s;
+}
+.searchBar input:focus {
+    box-shadow: 0 0 5px #eee;
+}
+
+.searchBar button {
+    height: 50px;
+    line-height: 50px;
+    padding: 0 30px;
+    border: none;
+    box-sizing: border-box;
+    background-color: #145daa;
+    font-size: 20px;
+    color: #fff;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    /*指示器改为手指形状*/
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+
 .topics {
     left: 75px;
     width: 1500px;
@@ -22,7 +69,7 @@
     box-shadow: darkgray 5px 5px 20px 5px;
 
     /*背景渐变过度效果*/
-    background: linear-gradient(to right, white, dodgerblue, wheat);
+    background: linear-gradient(45deg, white, dodgerblue, wheat);
     background-size: 200%;
     transition: background-position 0.5s;
 
@@ -38,6 +85,10 @@
     color: #0d1244;
 }
 
+.hot  svg{
+    width: 10%;
+    height: 10%;
+}
 
 #word {
     font-size: 18px;
@@ -46,12 +97,12 @@
 }
 
 #summary {
-    font-size: 12px;
+    font-size: 13px;
     color: #303030;
     padding: 0 20px;
 
     /*限制显示文本的行数*/
-    -webkit-line-clamp:4;
+    -webkit-line-clamp:3;
     /*排列方式*/
     -webkit-box-orient: vertical;
     /*将对象作为弹性伸缩盒子模型*/

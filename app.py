@@ -37,7 +37,7 @@ def get_hotSearch_bar():
 
 @app.route("/topicData")
 def topicData():
-    with open("spider/weibo/files/topic_band.json", "r") as f:
+    with open("spider/weibo/files/topic_band.json", "r", encoding="utf-8") as f:
         data = json.load(f)
         return data
 # 实现页面跳转

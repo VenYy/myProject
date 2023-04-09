@@ -25,7 +25,7 @@ headers = {
 
 def parse():
     data = []
-    for i in range(1, 7):
+    for i in range(1, 11):
         url = f"https://weibo.com/ajax/statuses/topic_band?sid=v_weibopro&category=all&page={i}&count=20"
         resp = requests.get(url, headers=headers)
         resp.encoding = "utf-8"
