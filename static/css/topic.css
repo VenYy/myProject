@@ -60,7 +60,7 @@
 
 .topic {
     width: 300px;
-    height: 200px;
+    height: 210px;
     margin: 40px 30px 40px 40px;
     float: left;
 
@@ -93,7 +93,7 @@
 #word {
     font-size: 18px;
     font-weight: bolder;
-    /*padding: 0 25px;*/
+    padding: 0 25px;
 }
 
 #summary {

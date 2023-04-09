@@ -10,18 +10,16 @@ import json
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 "
               "Safari/537.36 ",
-    "cookie": "SINAGLOBAL=9551435337052.799.1680615041641; ALF=1683437419; "
-              "SCF=Ap1xha1wDXEMROVsZPqkRYk02OfrzUpAyhNjiuEBCsrBgVu-cCTDKRTpCtYGUbJH3aca_0FMADYM1MJgTHlWDho.; UOR=,,"
-              "www.bing.com; SUB=_2AkMTbHPRf8NxqwJRmPoVy2_gbIpzzwrEieKlMIIKJRMxHRl-yT9yqhcmtRB6OOxdPhlNmGj78230"
-              "-azbL0uU3TfPFp1b; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9WF92zvB9WyMneS6-U5rRhaA; "
-              "_s_tentry=passport.weibo.com; Apache=9091549699167.816.1680932072142; "
-              "ULV=1680932072203:5:5:5:9091549699167.816.1680932072142:1680855673285; "
-              "XSRF-TOKEN=PPLfGDcO_u661st7kIEVxAdy; "
-              "WBPSESS=Jx_XaCleItbWmjWmltuZpE7HivfzRcmscsoJKyXTLM4iIrvSNJjjV4d541tlydr6ZRCy9pO"
-              "-TGsyuBvoNKsdaikM02ziDbqjhCwiqI5zP4_xElHgrNUpZPx6uez93WNkRxMNfzLEBnY49JJfNaRTJu3DfuGSAcfQT-0LYwdIQdk= "
+    "cookie": "SINAGLOBAL=9551435337052.799.1680615041641; "
+              "SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5UsQWzFS7rHN-kXpM6N5vH5JpX5KMhUgL"
+              ".FoMRe05c1h5Neoe2dJLoI79c9g44wHYt; ALF=1683600145; SSOLoginState=1681008147; "
+              "SCF=Ap1xha1wDXEMROVsZPqkRYk02OfrzUpAyhNjiuEBCsrBwUf6J2kzV-I6DNS3PcQYUML8WqoKXBFFPVyY7sLs0iA.; "
+              "SUB=_2A25JNlZEDeRhGeFG6FIX-C7LyT-IHXVqQsCMrDV8PUNbmtAGLUL4kW9NecZsSHFRBaT7YBwOqJfmQBCIr6qIH4hU; "
+              "_s_tentry=login.sina.com.cn; Apache=5543990509605.156.1681008151583; "
+              "ULV=1681008151592:6:6:1:5543990509605.156.1681008151583:1680932072203; UOR=,,127.0.0.1:5000; "
+              "PC_TOKEN=7ab9c640c4 "
 
 }
-
 
 def parse():
     data = []
@@ -36,6 +34,13 @@ def parse():
             summary = c["summary"]  # 导语
             read = c["read"]  # 阅读量
             mention = c["mention"]  # 讨论量
+            # try:
+            #     mid = c["mid"]
+            #     top_link = f"https://m.weibo.cn/detail/{mid}"
+            # except Exception as e:
+            #     mid = ""
+            #     top_link = f"https://m.weibo.cn/p/index?containerid=231522type%3D60%26q%3D%23{topic}%23%26t%3D&title=%E7%83%AD%E9%97%A8-"
+            # href = f"https://m.weibo.cn/p/index?containerid=231522type%3D60%26q%3D%23{topic}%23%26t%3D&title=%E7%83%AD%E9%97%A8-"
             href = f"https://s.weibo.com/weibo?q=%23{topic}%23"
             topic_dic = {"话题名称": topic, "导语": summary, "阅读量": read, "讨论量": mention, "链接": href}
             data.append(topic_dic)
