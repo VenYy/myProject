@@ -9,6 +9,7 @@
     height: 50px;
     line-height: 50px;
 }
+
 .searchBar input {
     flex: 1;
     height: 50px;
@@ -21,6 +22,7 @@
     padding: 0 20px;
     transition: all .3s;
 }
+
 .searchBar input:focus {
     box-shadow: 0 0 5px #eee;
 }
@@ -73,6 +75,8 @@
     background-size: 200%;
     transition: background-position 0.5s;
 
+    position: relative;
+
 
 }
 
@@ -85,7 +89,53 @@
     color: #0d1244;
 }
 
-.hot  svg{
+
+/*-------------------------*/
+
+/*跳转页面按钮的样式*/
+.analyse {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    /*正常状态下按钮透明度为0*/
+    opacity: 0;
+
+    border-radius: 10px;
+    box-shadow: #303030 2px 2px 4px;
+    background-color: #d9961d;
+
+    cursor: pointer;
+
+    /*a标签内文字 水平垂直居中*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+/*鼠标悬浮时改变按钮透明度*/
+.analyse:hover {
+    opacity: .9;
+    transition: all 0.5s;
+
+}
+
+#from {
+    top: 70%;
+    left: 10%;
+
+}
+
+
+#analyse {
+    top: 70%;
+    left: 55%;
+}
+
+/*-------------------------*/
+
+
+.hot svg {
     width: 10%;
     height: 10%;
 }
@@ -102,7 +152,7 @@
     padding: 0 20px;
 
     /*限制显示文本的行数*/
-    -webkit-line-clamp:3;
+    -webkit-line-clamp: 3;
     /*排列方式*/
     -webkit-box-orient: vertical;
     /*将对象作为弹性伸缩盒子模型*/
@@ -119,4 +169,27 @@
 #read {
     color: #303030;
     padding: 0 20px;
+}
+
+
+
+
+/*暂时不用了*/
+/*话题分析窗口*/
+/*当body有popup-open类名时，页面禁止滚动*/
+body.popup-open {
+    /*overflow: hidden;*/
+    position: relative;
+}
+.white_content {
+    display: none;
+    position: absolute;
+    /*top: 25%;*/
+    /*left: 25%;*/
+    width: 55%;
+    height: 55%;
+    padding: 20px;
+    background-color: white;
+    z-index: 1002;
+    overflow: auto;
 }

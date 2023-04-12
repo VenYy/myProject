@@ -12,18 +12,19 @@
 import requests
 import json
 from lxml import etree
+import re
 
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 "
               "Safari/537.36 ",
     "cookie": "SINAGLOBAL=9551435337052.799.1680615041641; "
               "SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5UsQWzFS7rHN-kXpM6N5vH5JpX5KMhUgL"
-              ".FoMRe05c1h5Neoe2dJLoI79c9g44wHYt; ALF=1683600145; SSOLoginState=1681008147; "
-              "SCF=Ap1xha1wDXEMROVsZPqkRYk02OfrzUpAyhNjiuEBCsrBwUf6J2kzV-I6DNS3PcQYUML8WqoKXBFFPVyY7sLs0iA.; "
-              "SUB=_2A25JNlZEDeRhGeFG6FIX-C7LyT-IHXVqQsCMrDV8PUNbmtAGLUL4kW9NecZsSHFRBaT7YBwOqJfmQBCIr6qIH4hU; "
-              "_s_tentry=login.sina.com.cn; Apache=5543990509605.156.1681008151583; "
-              "ULV=1681008151592:6:6:1:5543990509605.156.1681008151583:1680932072203; UOR=,,127.0.0.1:5000; "
-              "PC_TOKEN=7ab9c640c4 "
+              ".FoMRe05c1h5Neoe2dJLoI79c9g44wHYt; UOR=,,login.sina.com.cn; ALF=1683678659; SSOLoginState=1681086661; "
+              "SCF=Ap1xha1wDXEMROVsZPqkRYk02OfrzUpAyhNjiuEBCsrBxASdB1XQFZvUju25WH0QFpXlXJ5mZ0vB6eoeCuqSpfM.; "
+              "SUB=_2A25JNyiWDeRhGeFG6FIX-C7LyT-IHXVqRR1erDV8PUNbmtAGLVWhkW9NecZsSFsW-xJ2UpD3LHbc3goM7dV77gwx; "
+              "_s_tentry=login.sina.com.cn; Apache=4824609377262.867.1681086669169; "
+              "ULV=1681086669188:8:8:3:4824609377262.867.1681086669169:1681033533220; PC_TOKEN=9340f12267; "
+              "WBStorage=4d96c54e|undefined "
 
 }
 
@@ -46,18 +47,23 @@ def getUrl():
 
 def getDetailUrl(urls):
     detailUrls = []
+    pattern = '([A-Za-z0-9]+)'
     for url in urls:
         detailUrl = parse(url).xpath("//p[@class='from']/a[position()=1]/@href")
         for _ in detailUrl:
             u = "https:" + _.split("?")[0]
-            if u not in detailUrls:
-                detailUrls.append(u)
-    print(detailUrls)
-    print(len(detailUrls))
+            id = re.findall(pattern, u)[4]
+            wbApi = f"https://weibo.com/ajax/statuses/show?id={id}"
+            if wbApi not in detailUrls:
+                detailUrls.append(wbApi)
+    # print(detailUrls)
+    # print(len(detailUrls))
+    return detailUrls
 
 def run():
     urls = getUrl()
-    getDetailUrl(urls)
+    detailUrls = getDetailUrl(urls)
+    print(detailUrls)
 
 
 run()

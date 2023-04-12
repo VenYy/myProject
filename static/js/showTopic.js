@@ -10,7 +10,8 @@ function topic() {
             // $("#read").html("阅读量："+ data["data"][0]["阅读量"])
             var str = ""
             for (let i = 0; i < data["data"].length; i++) {
-                str += "<div class='topic' id='topic'>" + "<a href='" + data['data'][i]['链接'] + "'>"
+                // str += "<div class='topic' id='topic'>" + "<a href='" + data['data'][i]['链接'] + "'>"
+                str += "<div class='topic' id='topic'>"
                 str += "<p id='word'>" + data['data'][i]['话题名称'] + "</p>"
                 str += "<p id='summary'>" + data['data'][i]['导语'] + "</p>"
                 if (data['data'][i]['讨论量'] > 2000) {
@@ -19,13 +20,51 @@ function topic() {
                     str += "<p id='talk'>讨论量：" + data['data'][i]['讨论量'] + "</p>"
                 }
                 str += "<p id='read'>阅读量：" + data['data'][i]['阅读量'] + "</p>"
-                str += "</a></div>"
+                str += "<a class='analyse' id='analyse' onclick='openCenteredWindow()'>话题分析</a>"
+                str += "<a class='analyse' id='from' href='" + data['data'][i]['链接'] + "'>微博页面</a>"
+                // str += "</a></div>"
+                str += "</div>"
             }
             // console.log(str)
             $(".topics").append(str);
 
         }
     })
+}
+
+
+// 暂时用不到了
+function showWindow() {
+    // alert("aa")
+    var popup = document.getElementById("light");
+    // 显示弹出窗口
+    popup.style.display = "block";
+    // body元素添加禁用滚动
+    document.body.classList.add("popup-open");
+
+}
+
+// 暂时用不到了
+function hideWindow() {
+    var popup = document.getElementById("light");
+    popup.style.display = "none";
+    // 取消禁用滚动
+    document.body.classList.remove("popup-open")
+}
+
+
+// 使用window.open方法来创建窗口
+function openCenteredWindow() {
+    var windowWidth = 1200; // 窗口的宽度
+    var windowHeight = 800; // 窗口的高度
+    var screenWidth = screen.width; // 屏幕的宽度
+    var screenHeight = screen.height; // 屏幕的高度
+
+    var left = (screenWidth - windowWidth) / 2;
+    var top = (screenHeight - windowHeight) / 2;
+    var newWindow = window.open('http://127.0.0.1:5000/detailTopic', '', 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + left + ',top=' + top);
+    newWindow.moveTo(left, top);
+
 }
 
 
@@ -50,6 +89,17 @@ document.getElementById("searchBox").addEventListener("keyup", function (event) 
     if (event.keyCode === 13) {
         // 调用search()函数
         search();
+    }
+});
+
+
+// 当页面滚动到某个位置时，再加载需要延迟加载的内容
+window.addEventListener('scroll', function () {
+    if (window.pageYOffset > 1000) { // 页面向下滚动超过 1000 像素时
+        var lazyLoadDiv = document.getElementsByClassName("topic");
+        if (!lazyLoadDiv.innerHTML) { // 避免重复加载
+            lazyLoadDiv.innerHTML = 'waiting';
+        }
     }
 });
 

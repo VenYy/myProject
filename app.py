@@ -1,4 +1,6 @@
-from flask import Flask, render_template, url_for, redirect, jsonify
+import csv
+
+from flask import Flask, render_template, url_for, redirect, jsonify, request
 from pyecharts.charts import Bar, Timeline, Grid
 from pyecharts import options
 from pyecharts.globals import ThemeType
@@ -10,8 +12,8 @@ app = Flask(__name__)
 
 def hotSearch_bar(data):
     bar = Bar(init_opts=options.InitOpts(theme=ThemeType.MACARONS, width="800px", height="400px"))
-    bar.add_xaxis(list(data["词条"])[:10][::-1])
-    bar.add_yaxis("热度", list(data["热度"])[:10][::-1])
+    bar.add_xaxis(list(data["word"])[:10][::-1])
+    bar.add_yaxis("热度", list(data["hot"])[:10][::-1])
     # 折线（区域）图、柱状（条形）图、K线图 : {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
     # 散点图（气泡）图 : {a}（系列名称），{b}（数据名称），{c}（数值数组）, {d}（无）
     # 地图 : {a}（系列名称），{b}（区域名称），{c}（合并数值）, {d}（无）
@@ -30,7 +32,7 @@ def hotSearch_bar(data):
 
 @app.route("/hotSearchData")
 def get_hotSearch_bar():
-    data = pd.read_csv("spider/weibo/files/hot_band_bak.csv", encoding="utf-8")
+    data = pd.read_csv("spider/weibo/files/hotSearch.csv", encoding="utf-8")
     c = hotSearch_bar(data)
     return c.dump_options_with_quotes()
 
@@ -51,7 +53,7 @@ def hotSearchPage():
     return render_template("hotsearch.html")
 
 
-@app.route("/topicPage")
+@app.route("/topicPage", methods=["GET", "POST"])
 def topicPage():
     return render_template("topic.html")
 
@@ -59,6 +61,15 @@ def topicPage():
 @app.route("/othersPage")
 def othersPage():
     return render_template("others.html")
+
+
+@app.route("/detailTopic", methods=["POST", "GET"])
+def detailTopic():
+    data = topicData()
+    hrefs = [data["data"][i]["链接"] for i in data["data"]]
+    print(hrefs)
+
+    return render_template("detailTopic.html")
 
 
 if __name__ == '__main__':
