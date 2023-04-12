@@ -5,19 +5,8 @@ import requests
 from lxml import etree
 
 headers = {
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 "
-              "Safari/537.36 ",
-    "cookie": "SINAGLOBAL=9551435337052.799.1680615041641; "
-              "SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5UsQWzFS7rHN-kXpM6N5vH5JpX5KMhUgL"
-              ".FoMRe05c1h5Neoe2dJLoI79c9g44wHYt; UOR=,,127.0.0.1:5000; "
-              "ULV=1681173414488:11:11:6:640614947259.3503.1681173414436:1681132194532; ALF=1683858563; "
-              "SSOLoginState=1681266565; "
-              "SCF=Ap1xha1wDXEMROVsZPqkRYk02OfrzUpAyhNjiuEBCsrBTbmbzAcaSY-_1YjvJgwKMmDdRlCMYiuvVsQ3SAIB1cE.; "
-              "SUB=_2A25JMmfVDeRhGeFG6FIX-C7LyT-IHXVqRt4drDV8PUNbmtAGLWPNkW9NecZsSAfyLSKX4f_thng9IsFwzAjj1LKu; "
-              "XSRF-TOKEN=wjtM_rsW_1hroKGmP42sj4Tn; "
-              "WBPSESS=qJtA5EKTVAmfo4ozVa9MnqvcR0zz7rHwqy8Cz3zSQ"
-              "-fuYQI67cm_6vqyKlGjiP94F6hqvKXCIQqCypSb5EqFpsJWAH3os0oJVAUrYIUuhcKwrXZOoVF9yYSfQHzzIvsewP"
-              "-RBAlkG9XnEpWkwHUPOA== "
+    "user-agent": "",
+    "cookie": ""
 }
 
 
