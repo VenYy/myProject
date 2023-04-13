@@ -1,3 +1,5 @@
+import os
+import time
 from datetime import datetime
 from spider.weibo.Spider import *
 
@@ -31,14 +33,15 @@ def parseData(html):
 
 
 def run():
+    os.chdir("/media/venyy/Codes/project/spider/weibo")
+    current_dir = os.getcwd()
     hotSearchSpider = Spider()
     hotSearchSpider.url = "https://s.weibo.com/top/summary/"
     item_list = ["timeStamp", "word", "hot", "href"]
     html = hotSearchSpider.parse()
     data = parseData(html)
-    hotSearchSpider.saveAsCSV(path="./files/hotSearch.csv", data=data, item_list=item_list)
+    hotSearchSpider.saveAsCSV(path=f"{current_dir}/files/hotSearch.csv", data=data, item_list=item_list)
     # hotSearchSpider.saveAsJson(path="./files/hotSearch.json", jData={"data": data})
     print("Saving hotSearch....")
 
-
-run()
+# run()

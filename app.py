@@ -39,7 +39,9 @@ def hotSearch_bar(data):
                                                     # y轴标签配置项
                                                     axislabel_opts=options.LabelOpts(is_show=False),
                                                     # 不显示网格线
-                                                    splitline_opts={"show": False}
+                                                    splitline_opts={"show": False},
+                                                    # 不显示y轴刻度线
+                                                    axistick_opts={"show": False}
                                                     ),
                         xaxis_opts=options.AxisOpts(splitline_opts={"show": False}),
                         # 图例配置项
@@ -76,12 +78,13 @@ def get_hotSearch_bar():
     hot = []
     href = []
     timeStamp = []
-    for i in range(len(result)):
-        word.append(result[i][1])
-        hot.append(result[i][2])
-        href.append(result[i][3])
-        timeStamp.append(result[i][4])
+    for i in result:
+        word.append(i[1])
+        hot.append(i[2])
+        href.append(i[3])
+        timeStamp.append(i[4])
     data = {"word": word, "hot": hot, "href": href, "timeStamp": timeStamp}
+    # print(data)
 
     c = hotSearch_bar(data)
     return c.dump_options_with_quotes()
@@ -89,13 +92,28 @@ def get_hotSearch_bar():
 
 @app.route("/topicData")
 def topicData():
-    with open("spider/weibo/files/topic_band.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
-        return data
+    result = db.session.execute(text(
+        "select * from topic where timeStamp in (select max(timeStamp) from topic)"
+    )).fetchall()
+    word = []
+    summary = []
+    read = []
+    mention = []
+    href = []
+    link = []
+    for i in result:
+        word.append(i[1])
+        summary.append(i[2])
+        read.append(i[3])
+        mention.append(i[4])
+        href.append(i[5])
+        link.append(i[7])
+    data = {"word": word, "summary": summary, "read": read, "mention": mention, "href": href, "link": link}
+
+    return data
 
 
 # 实现页面跳转
-
 
 @app.route('/', methods=["GET", "POST"])
 def hello_world():

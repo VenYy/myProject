@@ -83,18 +83,20 @@ class Topic(Base):
     read = Column(Integer, default=0)
     mention = Column(Integer, default=0)
     href = Column(Text)
+    link = Column(Text, default="")
     timeStamp = Column(DateTime, default=datetime.utcnow())
 
     def __repr__(self):
         return f"word={self.word}, summary={self.summary}, read={self.read}, " \
                f"mention={self.mention}, href={self.href}, timeStamp={self.timeStamp}"
 
-    def __init__(self, word, summary=None, read=None, mention=None, href=None, timeStamp=datetime.utcnow()):
+    def __init__(self, word, summary=None, read=None, mention=None, href=None, link=None, timeStamp=datetime.utcnow()):
         self.word = word
         self.summary = summary
         self.read = read
         self.mention = mention
         self.href = href
+        self.link = link
         self.timeStamp = timeStamp
 
 

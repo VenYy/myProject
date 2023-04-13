@@ -1,8 +1,20 @@
+import time
 from datetime import datetime
 
 from spider.weibo.Spider import *
+import os
+import re
+
 
 hotTopicSpider = Spider()
+
+def filter_emoji(desstr, restr=""):
+    # 过滤表情
+    try:
+        co = re.compile(u'[\U00010000-\U0010ffff]')
+    except re.error:
+        co = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
+    return co.sub(restr, desstr)
 
 
 def parse():
@@ -11,15 +23,16 @@ def parse():
         hotTopicSpider.url = f"https://weibo.com/ajax/statuses/topic_band?sid=v_weibopro&category=all&page={i}&count=20"
         content = hotTopicSpider.parse_json()
         for c in content["data"]["statuses"]:
-            # print(j["topic"])e
-            topic = c["topic"]  # 话题名称
-            summary = c["summary"]  # 导语
+            # print(j["topic"])
+            topic = filter_emoji(c["topic"].replace("\n", ""))  # 话题名称
+            summary = filter_emoji(c["summary"].replace("\n", ""))  # 导语
             read = c["read"]  # 阅读量
             mention = c["mention"]  # 讨论量
             timeStamp = datetime.now().strftime("%Y-%m-%d %H:%M")  # 时间
             # href = f"https://m.weibo.cn/p/index?containerid=231522type%3D60%26q%3D{topic}%26t%3D0&title=热门-"
             href = f"https://m.weibo.cn/api/container/getIndex?containerid=231522type%3D60%26q%3D%23{topic}%23%26t%3D10&title=%E7%83%AD%E9%97%A8-%23{topic}%23"
-            topic_dic = {"word": topic, "summary": summary, "read": read, "mention": mention, "href": href, "time_stamp": timeStamp}
+            link = f"https://s.weibo.com/weibo?q=%23{topic}%23"
+            topic_dic = {"word": topic, "summary": summary, "read": read, "mention": mention, "href": href, "link": link, "time_stamp": timeStamp}
 
             data.append(topic_dic)
     return data
@@ -27,9 +40,12 @@ def parse():
 
 def saveCSV():
     data = parse()
-    item_list = ["word", "summary", "read", "mention", "href", "time_stamp"]
+    os.chdir("/media/venyy/Codes/project/spider/weibo")
+    current_dir = os.getcwd()
+    # print(current_dir)
+    item_list = ["word", "summary", "read", "mention", "href", "link", "time_stamp"]
     print(data)
-    hotTopicSpider.saveAsCSV("./files/topic.csv", data=data, item_list=item_list)
+    hotTopicSpider.saveAsCSV(path=f"{current_dir}/files/topic.csv", data=data, item_list=item_list)
 
 
 # saveCSV()
@@ -66,5 +82,6 @@ def run():
     saveCSV()
     print("Saving hotTopic....")
 
+# run()
 
-run()
+# run()

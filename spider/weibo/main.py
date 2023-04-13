@@ -1,12 +1,15 @@
 import time
 
-from spider.weibo import hotTopic, hotSearch, analyse
+from spider.weibo import hotTopic, analyse, hotSearch
 
-count = 1
-while True:
-    print(f"第{count}次处理")
-    hotSearch.run()
-    hotTopic.run()
-    count += 1
-    time.sleep(1000*60)
-    analyse.run()
+if __name__ == '__main__':
+    count = 1
+    while True:
+        print(f"第{count}次执行")
+
+        hotTopic.run()
+        hotSearch.run()
+        analyse.run()
+        count += 1
+
+        time.sleep(60*5)
