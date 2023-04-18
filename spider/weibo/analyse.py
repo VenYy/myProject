@@ -1,6 +1,8 @@
 import time
 
-from spider.weibo.DBManager import DBManager, Topic, HotSearch
+from sqlalchemy import text
+
+from spider.weibo.DBManager import DBManager, Topic, HotSearch, SearchTrend
 import csv
 
 db = DBManager()
@@ -27,10 +29,23 @@ def saveTopicToDB(path):
 
         print("Save topic to database success")
 
+def saveTrendToDB(path):
+    with open(path, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        data = [i[0] for i in db.session.execute(text("select word from searchTrend")).fetchall()]
+        print(data)
+        for row in reader:
+            if row["word"] not in data:
+                trend = SearchTrend(word=row["word"], href=row["href"], trend=row["trend"])
+                db.add_data(trend)
 
+        print("Save search trend to database success")
 def run():
     saveHotSearchToDB("./files/hotSearch.csv")
     saveTopicToDB("./files/topic.csv")
+    saveTrendToDB("./files/searchTrend.csv")
     print("Saving to DB....")
+
+
 
 # run()

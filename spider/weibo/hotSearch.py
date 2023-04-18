@@ -16,6 +16,7 @@ def parseData(html):
     timeStamp = datetime.now().strftime("%Y-%m-%d %H:%M")     # 时间
 
     result = []
+    trendResult = []
 
     if len(words) == len(hots):
         for word, hot in zip(words, hots):
@@ -26,8 +27,11 @@ def parseData(html):
             else:
                 key = f"%23{word}%23"
                 href = f"https://m.weibo.cn/p/index?containerid=231522type%3D60%26q%3D{key}%26t%3D0&title=热门-"
+                trend = f"https://m.s.weibo.com/ajax_topic/trend?q={key}"
                 result.append({"timeStamp": timeStamp, "word": word, "hot": hot, "href": href})
-        return result
+                # 热搜词条趋势
+                trendResult.append({"word": word, "href": href, "trend": trend})
+        return result, trendResult
     else:
         return None
 
@@ -37,10 +41,12 @@ def run():
     current_dir = os.getcwd()
     hotSearchSpider = Spider()
     hotSearchSpider.url = "https://s.weibo.com/top/summary/"
-    item_list = ["timeStamp", "word", "hot", "href"]
     html = hotSearchSpider.parse()
-    data = parseData(html)
-    hotSearchSpider.saveAsCSV(path=f"{current_dir}/files/hotSearch.csv", data=data, item_list=item_list)
+    data, trendResult = parseData(html)
+    hotSearchSpider.saveAsCSV(path=f"{current_dir}/files/hotSearch.csv", data=data,
+                              item_list=["timeStamp", "word", "hot", "href"])
+    hotSearchSpider.saveAsCSV(path=f"{current_dir}/files/searchTrend.csv", data=trendResult,
+                              item_list=["word", "href", "trend"])
     # hotSearchSpider.saveAsJson(path="./files/hotSearch.json", jData={"data": data})
     print("Saving hotSearch....")
 

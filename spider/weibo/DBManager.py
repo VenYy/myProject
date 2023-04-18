@@ -1,10 +1,7 @@
-import time
-
 from sqlalchemy import Column, Integer, String, Text, DateTime, create_engine, MetaData, Table, text
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.engine.reflection import Inspector
 from datetime import datetime
-
 
 Base = declarative_base()
 
@@ -116,3 +113,18 @@ class HotSearch(Base):
         self.hot = hot
         self.href = href
         self.timeStamp = timeStamp
+
+
+class SearchTrend(Base):
+    __tablename__ = "searchTrend"
+    word = Column(String(32), primary_key=True)
+    href = Column(Text, default="")
+    trend = Column(Text, default="")
+
+    def __repr__(self):
+        return f"word={self.word}, href={self.href}, trend={self.trend}"
+
+    def __init__(self, word, href="", trend=""):
+        self.word = word
+        self.href = href
+        self.trend = trend

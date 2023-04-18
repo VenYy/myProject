@@ -3,8 +3,6 @@ import json
 import re
 from datetime import datetime
 
-import pandas
-
 with open("./files/tmp.json", "r", encoding="utf-8") as f:
     data = json.load(f)
     # print(len(data["data"]))
@@ -57,6 +55,5 @@ def saveToCSV():
 
         writer.writeheader()
         writer.writerows(resData)
-
 
 

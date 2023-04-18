@@ -8,6 +8,7 @@
     width: 500px;
     height: 50px;
     line-height: 50px;
+    /*float: left;*/
 }
 
 .searchBar input {
@@ -41,6 +42,45 @@
     /*指示器改为手指形状*/
     cursor: pointer;
 }
+
+
+.filterBar {
+    height: 30px;
+    width: 500px;
+    margin-left: 120px;
+
+    /*padding: 50px 0;*/
+}
+
+.filterBar button {
+    font-size: 17px;
+    height: 30px;
+    width: 90px;
+    border: none;
+    margin-right: 30px;
+    border-radius: 15px;
+    box-shadow: #303030 1px 1px 2px;
+
+}
+
+.filterBar .sortIcon {
+    max-width: 70%;
+    max-height: 70%;
+    display: inline-block;
+    vertical-align: text-top;
+}
+
+
+.filterBar button:hover {
+    cursor: pointer;
+}
+
+/*点击按钮时改变颜色*/
+.filterBar button:active {
+    background-color: #145daa;
+    color: white;
+}
+
 
 .hide {
     display: none;
@@ -93,13 +133,14 @@
 /*-------------------------*/
 
 /*跳转页面按钮的样式*/
-.analyse {
+.transPage {
     position: absolute;
     width: 100px;
     height: 50px;
     /*正常状态下按钮透明度为0*/
     opacity: 0;
 
+    border: none;
     border-radius: 10px;
     box-shadow: #303030 2px 2px 4px;
     background-color: #d9961d;
@@ -114,7 +155,7 @@
 }
 
 /*鼠标悬浮时改变按钮透明度*/
-.analyse:hover {
+.transPage:hover {
     opacity: .9;
     transition: all 0.5s;
 
@@ -135,7 +176,7 @@
 /*-------------------------*/
 
 
-.hot svg {
+.hot img {
     width: 10%;
     height: 10%;
 }
@@ -161,7 +202,7 @@
     overflow: hidden;
 }
 
-#talk {
+#mention {
     color: #303030;
     padding: 0 20px;
 }
@@ -172,8 +213,6 @@
 }
 
 
-
-
 /*暂时不用了*/
 /*话题分析窗口*/
 /*当body有popup-open类名时，页面禁止滚动*/
@@ -181,6 +220,7 @@ body.popup-open {
     /*overflow: hidden;*/
     position: relative;
 }
+
 .white_content {
     display: none;
     position: absolute;

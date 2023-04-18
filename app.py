@@ -4,8 +4,6 @@ from flask import Flask, render_template, url_for, redirect, jsonify, request
 from pyecharts.charts import Bar, Timeline, Grid
 from pyecharts import options
 from pyecharts.globals import ThemeType
-import pandas as pd
-import json
 from spider.weibo.DBManager import *
 
 app = Flask(__name__)
@@ -33,7 +31,10 @@ def hotSearch_bar(data):
     # 示例：formatter: '{b}: {@score}'
     bar.set_series_opts(label_opts=options.LabelOpts(is_show=True, formatter="{b}-{c}", font_size=12, color="yellow",
                                                      font_weight="bold"))
-    bar.set_global_opts(title_opts=options.TitleOpts(title="微博热搜排行榜", pos_left="40%"),
+    bar.set_global_opts(title_opts=options.TitleOpts(title="微博热搜排行榜", pos_left="40%",
+                                                     subtitle="更新时间："+str(data["timeStamp"][0]),
+                                                     subtitle_textstyle_opts={"color": "darkgreen"}
+                                                     ),
                         # 坐标轴配置项
                         yaxis_opts=options.AxisOpts(is_show=True,
                                                     # y轴标签配置项
@@ -135,13 +136,9 @@ def othersPage():
     return render_template("others.html")
 
 
-@app.route("/detailTopic", methods=["POST", "GET"])
-def detailTopic():
-    data = topicData()
-    hrefs = [data["data"][i]["链接"] for i in data["data"]]
-    print(hrefs)
-
-    return render_template("detailTopic.html")
+@app.route("/topic/<word>", methods=["POST", "GET"])
+def detailTopic(word):
+    return render_template("detailTopic.html", word=word)
 
 
 if __name__ == '__main__':

@@ -11,8 +11,6 @@ function hot_search() {
             chart.setOption(data)
         }
     });
-
-
 }
 
 

@@ -1,68 +1,37 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../static/css/index.css">
-    <link rel="stylesheet" href="../static/css/topic.css">
-    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
-    <script src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
-    <title>话题</title>
-</head>
-<body>
-<div id="sidebar" class="sidebar">
-    <div class="logo"><span><img src="../static/images/weibo.svg" alt=""> 微博舆情分析</span></div>
-    <div class="index">
-        <a href="http://127.0.0.1:5000/" class="index_a"><span><svg t="1680849027788" class="icon"
-                                                                    viewBox="0 0 1024 1024" version="1.1"
-                                                                    xmlns="http://www.w3.org/2000/svg" p-id="897"
-                                                                    width="200"
-                                                                    height="200"><path
-                d="M938.11 432.44L552.72 156.88c-23.9-17.17-57.9-17.17-81.44 0L85.89 432.44c-16 11.7-19.87 34.72-8.68 51.42 14 14.58 38.61 16.83 54.79 5l357.2-261.21a38.38 38.38 0 0 1 45.6 0l362.76 265.28c16 11.69 38 7.63 49.23-9.07 11.21-16.7 7.31-39.72-8.68-51.42z"
-                fill="#303030" p-id="898"></path><path
-                d="M534.14 296.68a38 38 0 0 0-44.28 0L180.14 519H180v301a60 60 0 0 0 60 60h165V729.14A48.14 48.14 0 0 1 453.14 681h117.72A48.14 48.14 0 0 1 619 729.14V880h165a60 60 0 0 0 60-60V519h-0.14z"
-                fill="#303030" p-id="899"></path></svg><i>首页</i></span></a>
-        <a href="http://127.0.0.1:5000/topicPage" class="index_a"><span><svg t="1680849057580" class="icon"
-                                                                             viewBox="0 0 1024 1024"
-                                                                             version="1.1"
-                                                                             xmlns="http://www.w3.org/2000/svg"
-                                                                             p-id="1054" width="200"
-                                                                             height="200"><path
-                d="M738.6 130.88h-452a101.4 101.4 0 0 0-101.4 101.4v556.44a101.4 101.4 0 0 0 101.4 101.4h322.46C736.6 890.12 840 786.73 840 659.18v-426.9a101.4 101.4 0 0 0-101.4-101.4zM513 655.33a35.35 35.35 0 0 1-35.35 35.35H328.88a35.35 35.35 0 0 1-35.35-35.35A35.35 35.35 0 0 1 328.88 620h148.77A35.35 35.35 0 0 1 513 655.33z m219-146a35.35 35.35 0 0 1-35.35 35.35H328.88a35.35 35.35 0 0 1-35.35-35.35A35.35 35.35 0 0 1 328.88 474h367.77A35.35 35.35 0 0 1 732 509.33z m0-140a35.35 35.35 0 0 1-35.35 35.35H328.88a35.35 35.35 0 0 1-35.35-35.35A35.35 35.35 0 0 1 328.88 334h367.77A35.35 35.35 0 0 1 732 369.33z"
-                fill="#303030" p-id="1055"></path></svg><i>话题</i></span></a>
-        <a href="http://127.0.0.1:5000/hotSearchPage" class="index_a"><span><svg t="1680849074222" class="icon"
-                                                                                 viewBox="0 0 1024 1024"
-                                                                                 version="1.1"
-                                                                                 xmlns="http://www.w3.org/2000/svg"
-                                                                                 p-id="1212" width="200"
-                                                                                 height="200"><path
-                d="M815.83 744.44L749.4 678a51.3 51.3 0 0 0-72.54 0 51.3 51.3 0 0 0 0 72.54L743.29 817a51.3 51.3 0 0 0 72.54 0 51.3 51.3 0 0 0 0-72.56zM742.48 441.24C742.48 289.78 619.7 167 468.24 167S194 289.78 194 441.24s122.78 274.24 274.24 274.24S742.48 592.7 742.48 441.24z m-244.7-7.8a100.89 100.89 0 1 1 100.89-100.89 100.89 100.89 0 0 1-100.89 100.89z"
-                fill="#303030" p-id="1213"></path></svg><i>热搜</i></span></a>
-        <a href="http://127.0.0.1:5000/othersPage" class="index_a"><span><svg t="1680849094324" class="icon"
-                                                                              viewBox="0 0 1024 1024"
-                                                                              version="1.1"
-                                                                              xmlns="http://www.w3.org/2000/svg"
-                                                                              p-id="1368" width="200"
-                                                                              height="200"><path
-                d="M571 475.47s129 9.95 193.17-54.2a124.07 124.07 0 0 0 36.26-89 128.27 128.27 0 0 0-37.72-89.54C713 193 633.07 192.33 584.14 241.25c-60.83 60.84-54.85 192.63-54.85 192.63 0.93 25.49 18.49 41.05 41.71 41.59zM261.2 242.72a128.18 128.18 0 0 0-37.72 89.54 124 124 0 0 0 36.25 89c64.15 64.15 193.18 54.2 193.18 54.2 23.2-0.54 40.76-16.1 41.7-41.59 0 0 6-131.79-54.86-192.63-48.93-48.91-128.88-48.24-178.55 1.48zM571 510.82c-23.21 0.53-40.77 16.1-41.7 41.59 0 0-6 131.79 54.85 192.62C633.07 794 713 793.27 762.7 743.57A128.29 128.29 0 0 0 800.42 654a124.1 124.1 0 0 0-36.26-89C700 500.87 571 510.82 571 510.82zM452.91 510.82s-129-9.95-193.18 54.19a124 124 0 0 0-36.25 89 128.2 128.2 0 0 0 37.72 89.54C310.87 793.27 390.82 794 439.75 745c60.83-60.83 54.86-192.62 54.86-192.62-0.94-25.46-18.5-41.03-41.7-41.56z"
-                fill="#303030" p-id="1369"></path></svg><i>其他</i></span></a>
+{% extends "index.html" %}
+{% block head %}
+    <!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../static/css/index.css">
+        <link rel="stylesheet" href="../static/css/topic.css">
+        <script src="../static/js/jquery.min.js"></script>
+        <script src="../static/js/echarts.min.js"></script>
+        <title>{% block title %}话题{% endblock %}</title>
+    </head>
+    <body>
+{% endblock %}
+
+{% block content %}
+    <div class="main">
+        <div class="header">
+            <div class="searchBar">
+                <input type="text" id="searchBox" placeholder="Search......">
+                <button type="submit" onclick="search()">搜索</button>
+            </div>
+            <div class="filterBar">
+                <button onclick="sortMention()" class="filterButton">讨论量<span><img class="sortIcon" src="../static/images/sort.svg" alt=""></span></button>
+                <button onclick="sortRead()" class="filterButton">阅读量<span><img class="sortIcon" src="../static/images/sort.svg" alt=""></span></button>
+
+            </div>
+        </div>
+        <div class="topics"></div>
     </div>
 
-</div>
-<div class="main">
-    <div class="searchBar">
-        <input type="text" id="searchBox" placeholder="Search......">
-        <button type="submit" onclick="search()">搜索</button>
-    </div>
-    <div class="topics"></div>
-</div>
-
-{#窗口#}
-<div id="light" class="white_content">
-    <a href="javascript:void(0)" onclick="hideWindow()" class="close">关闭</a>
-</div>
-
-<script src="../static/js/showTopic.js"></script>
-<script src="../static/js/transfer.js">
-</script>
-</body>
-</html>
+    <script src="../static/js/showTopic.js"></script>
+    <script src="../static/js/transfer.js">
+    </script>
+    </body>
+    </html>
+{% endblock %}
