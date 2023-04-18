@@ -1,10 +1,13 @@
 import csv
+import json
+import os
 
 from flask import Flask, render_template, url_for, redirect, jsonify, request
-from pyecharts.charts import Bar, Timeline, Grid
+from pyecharts.charts import Bar, Timeline, Grid, Line
 from pyecharts import options
 from pyecharts.globals import ThemeType
 from spider.weibo.DBManager import *
+from spider.weibo.searchTrend import *
 
 app = Flask(__name__)
 """
@@ -17,11 +20,12 @@ app.config["SQLALCHEMY_ECHO"] = True
 """
 # 初始化db，关联flask项目
 db = DBManager()
+os.chdir("/media/venyy/Codes/project/")
 
 
 # 绘制Top热搜柱状图
 def hotSearch_bar(data):
-    bar = Bar(init_opts=options.InitOpts(theme=ThemeType.MACARONS, width="1600px", height="400px"))
+    bar = Bar(init_opts=options.InitOpts(theme=ThemeType.MACARONS, width="1600px", height="600px"))
     bar.add_xaxis(list(data["word"])[:-1][::-1])
     bar.add_yaxis("热度", list(data["hot"])[:-1][::-1])
     # 折线（区域）图、柱状（条形）图、K线图 : {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
@@ -67,6 +71,106 @@ def hotSearch_bar(data):
     bar.reversal_axis()
 
     return bar
+
+
+# 绘制热搜趋势折线图
+# 热搜趋势-阅读量
+def searchTrendRead_line(data):
+    line = Line(init_opts=options.InitOpts(width="1000px", height="450px"))
+    line.set_global_opts(title_opts=options.TitleOpts(title="热搜趋势-阅读量", pos_left="40%"),
+                         legend_opts=options.LegendOpts(is_show=True,  pos_left="15%", pos_top="10%", orient="vertical"),
+                         tooltip_opts=options.TooltipOpts(is_show=True, trigger="axis"),
+                         datazoom_opts=options.DataZoomOpts(is_show=True, type_="inside"))
+    line.add_xaxis(list(data["time"]))
+    line.add_yaxis(data["word"][0], list(data["read"][0]))
+    line.add_yaxis(data["word"][1], list(data["read"][1]))
+    line.add_yaxis(data["word"][2], list(data["read"][2]))
+    line.add_yaxis(data["word"][3], list(data["read"][3]))
+    line.add_yaxis(data["word"][4], list(data["read"][4]))
+
+    # 折线粗细
+    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=2))
+
+    return line
+
+
+# 热搜趋势-讨论量
+def searchTrendMention_line(data):
+    line = Line(init_opts=options.InitOpts(width="1000px", height="450px"))
+    line.set_global_opts(title_opts=options.TitleOpts(title="热搜趋势-讨论量", pos_left="40%"),
+                         legend_opts=options.LegendOpts(is_show=True, pos_left="15%", pos_top="10%", orient="vertical"),
+                         tooltip_opts=options.TooltipOpts(is_show=True, trigger="axis"),
+                         datazoom_opts=options.DataZoomOpts(is_show=True, type_="inside"))
+    line.add_xaxis(list(data["time"]))
+    line.add_yaxis(data["word"][0], list(data["mention"][0]))
+    line.add_yaxis(data["word"][1], list(data["mention"][1]))
+    line.add_yaxis(data["word"][2], list(data["mention"][2]))
+    line.add_yaxis(data["word"][3], list(data["mention"][3]))
+    line.add_yaxis(data["word"][4], list(data["mention"][4]))
+
+    # 折线粗细
+    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=2))
+
+    return line
+
+
+# 热搜趋势-原创人数
+def searchTrendOri_line(data):
+    line = Line(init_opts=options.InitOpts(width="1000px", height="450px"))
+    line.set_global_opts(title_opts=options.TitleOpts(title="热搜趋势-原创人数", pos_left="40%"),
+                         legend_opts=options.LegendOpts(is_show=True, pos_left="15%", pos_top="10%", orient="vertical"),
+                         tooltip_opts=options.TooltipOpts(is_show=True, trigger="axis"),
+                         datazoom_opts=options.DataZoomOpts(is_show=True, type_="inside"))
+    line.add_xaxis(list(data["time"]))
+    line.add_yaxis(data["word"][0], list(data["ori"][0]))
+    line.add_yaxis(data["word"][1], list(data["ori"][1]))
+    line.add_yaxis(data["word"][2], list(data["ori"][2]))
+    line.add_yaxis(data["word"][3], list(data["ori"][3]))
+    line.add_yaxis(data["word"][4], list(data["ori"][4]))
+
+    # 折线粗细
+    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=2))
+
+    return line
+
+
+@app.route("/searchTrendData")
+def searchTrend():
+    with open("spider/weibo/files/trend.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+    # print(data["data"])
+    word = []
+    read = []
+    mention = []
+    ori = []
+    time = []
+    for i in data["data"]:
+        # print(i["word"])
+        word.append(i["word"])
+        r = []
+        m = []
+        o = []
+        # time.append(i["read"][j]["time"] for j in range(len(i["read"])))
+        for j in range(len(i["read"])):
+            # print(i["read"][j]["time"])
+            t = i["read"][j]["time"]
+            r.append(i["read"][j]["value"])
+            m.append(i["mention"][j]["value"])
+            o.append(i["ori"][j]["value"])
+            if t not in time:
+                time.append(t)
+
+        read.append(r)
+        mention.append(m)
+        ori.append(o)
+    data = {"word": word, "read": read, "mention": mention, "ori": ori, "time": time}
+
+    readLine = searchTrendRead_line(data)
+    mentionLine = searchTrendMention_line(data)
+    oriLine = searchTrendOri_line(data)
+    return [readLine.dump_options_with_quotes(),
+            mentionLine.dump_options_with_quotes(),
+            oriLine.dump_options_with_quotes()]
 
 
 @app.route("/hotSearchData")

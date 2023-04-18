@@ -1,6 +1,6 @@
 import time
 
-from spider.weibo import hotTopic, analyse, hotSearch
+from spider.weibo import hotTopic, analyse, hotSearch, searchTrend
 
 if __name__ == '__main__':
     count = 1
@@ -10,6 +10,8 @@ if __name__ == '__main__':
         hotTopic.run()
         hotSearch.run()
         analyse.run()
+        searchTrend.run()
+
         count += 1
 
         time.sleep(60*5)

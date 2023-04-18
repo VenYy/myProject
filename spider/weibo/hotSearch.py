@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 from spider.weibo.Spider import *
 
+
 def parseData(html):
     words = html.xpath("//tbody/tr/td/a/text()")[1:]            # 词条
     # print(len(words), words)
@@ -34,6 +35,9 @@ def parseData(html):
         return result, trendResult
     else:
         return None
+
+
+
 
 
 def run():
