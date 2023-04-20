@@ -5,7 +5,7 @@
     padding: 50px 0;
     margin-left: 120px;
     margin-top: 30px;
-    width: 500px;
+    width: 800px;
     height: 50px;
     line-height: 50px;
     /*float: left;*/
@@ -16,6 +16,7 @@
     height: 50px;
     line-height: 50px;
     box-sizing: border-box;
+    box-shadow: #303030 1px 1px 3px;
     outline: none;
     border: none;
     border-top-left-radius: 25px;
@@ -33,6 +34,7 @@
     line-height: 50px;
     padding: 0 30px;
     border: none;
+    box-shadow: #303030 1px 1px 3px;
     box-sizing: border-box;
     background-color: #145daa;
     font-size: 20px;
@@ -41,6 +43,11 @@
     border-bottom-right-radius: 25px;
     /*指示器改为手指形状*/
     cursor: pointer;
+}
+
+.searchBar button:active {
+    box-shadow: 0 0 5px #eee;
+
 }
 
 
@@ -73,6 +80,8 @@
 
 .filterBar button:hover {
     cursor: pointer;
+    box-shadow: #303030 2px 2px 3px;
+
 }
 
 /*点击按钮时改变颜色*/
@@ -111,7 +120,8 @@
     box-shadow: darkgray 5px 5px 20px 5px;
 
     /*背景渐变过度效果*/
-    background: linear-gradient(45deg, white, dodgerblue, wheat);
+    background: linear-gradient(45deg, seashell, dodgerblue, sandybrown);
+    /*background-color: white;*/
     background-size: 200%;
     transition: background-position 0.5s;
 

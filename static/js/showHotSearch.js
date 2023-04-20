@@ -20,7 +20,6 @@ function trend_read() {
         url: "http://127.0.0.1:5000/searchTrendData",
         dataType: "json",
         success: function (data) {
-            console.log(data)
             chart.setOption(JSON.parse(data[0]))
         }
     })
@@ -33,7 +32,6 @@ function trend_mention() {
         url: "http://127.0.0.1:5000/searchTrendData",
         dataType: "json",
         success: function (data) {
-            console.log(data)
             chart.setOption(JSON.parse(data[1]))
         }
     })
@@ -52,6 +50,7 @@ function trend_ori() {
         }
     })
 }
+
 
 hot_search()
 trend_read()

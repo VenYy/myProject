@@ -31,13 +31,10 @@ def parseData(html):
                 trend = f"https://m.s.weibo.com/ajax_topic/trend?q={key}"
                 result.append({"timeStamp": timeStamp, "word": word, "hot": hot, "href": href})
                 # 热搜词条趋势
-                trendResult.append({"word": word, "href": href, "trend": trend})
+                trendResult.append({"word": word, "href": href, "trend": trend, "timeStamp": timeStamp})
         return result, trendResult
     else:
         return None
-
-
-
 
 
 def run():
@@ -50,7 +47,7 @@ def run():
     hotSearchSpider.saveAsCSV(path=f"{current_dir}/files/hotSearch.csv", data=data,
                               item_list=["timeStamp", "word", "hot", "href"])
     hotSearchSpider.saveAsCSV(path=f"{current_dir}/files/searchTrend.csv", data=trendResult,
-                              item_list=["word", "href", "trend"])
+                              item_list=["word", "href", "trend", "timeStamp"])
     # hotSearchSpider.saveAsJson(path="./files/hotSearch.json", jData={"data": data})
     print("Saving hotSearch....")
 

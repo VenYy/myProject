@@ -14,15 +14,15 @@ function topic() {
                 str += `<div class='topic' id='topic' data-read=${data['read'][i]} data-mention=${data['mention'][i]}>`
                 str += `<p id='word'>${data['word'][i]}</p>`
                 str += `<p id='summary'>${data['summary'][i]}</p>`
-                if (data['mention'][i] > 2000) {
+                if (data['mention'][i] > 3000) {
                     str += `<p id="mention">讨论量：` + data["mention"][i] + `<span class='hot'><img src='static/images/hot.svg' alt='' ></span>` + "</p>"
+                    str += `<a class='transPage' id='analyse' data-href="${href}" href="/topic/${word}" target="_blank">话题分析</a>`
                 } else {
                     str += `<p id='mention'>讨论量：${data['mention'][i]} </p>`
                 }
                 str += `<p id='read'>阅读量：` + data['read'][i] + "</p>"
                 var word = data['word'][i]
                 var href = data['href'][i]
-                str += `<a class='transPage' id='analyse' data-href="${href}" href="/topic/${word}" target="_blank">话题分析</a>`
                 str += `<a class='transPage' id='from' href=${data['link'][i]} >微博页面</a>`
                 // str += "</a></div>"
                 str += "</div>"

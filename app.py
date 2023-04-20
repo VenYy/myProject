@@ -9,6 +9,7 @@ from pyecharts.globals import ThemeType
 from spider.weibo.DBManager import *
 from spider.weibo.searchTrend import *
 
+
 app = Flask(__name__)
 """
 DB_URI = "mysql+pymysql://root:0226@127.0.0.1:3306/weibo"
@@ -33,7 +34,10 @@ def hotSearch_bar(data):
     # 地图 : {a}（系列名称），{b}（区域名称），{c}（合并数值）, {d}（无）
     # 饼图、仪表盘、漏斗图: {a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
     # 示例：formatter: '{b}: {@score}'
-    bar.set_series_opts(label_opts=options.LabelOpts(is_show=True, formatter="{b}-{c}", font_size=12, color="yellow",
+    bar.set_series_opts(label_opts=options.LabelOpts(is_show=True,
+                                                     formatter="{b}-{c}",
+                                                     font_size=12,
+                                                     color="yellow",
                                                      font_weight="bold"))
     bar.set_global_opts(title_opts=options.TitleOpts(title="微博热搜排行榜", pos_left="40%",
                                                      subtitle="更新时间："+str(data["timeStamp"][0]),
@@ -63,9 +67,11 @@ def hotSearch_bar(data):
                         # 视觉映射
                         visualmap_opts=options.VisualMapOpts(is_show=True, type_="color",
                                                              range_color="",
-                                                             pos_top="middle", pos_left="2%",
+                                                             pos_top="10%", pos_left="5%",
+                                                             orient="vertical",
                                                              range_text=["High", "Low"]
-                                                             )
+                                                             ),
+                        graphic_opts=options.GraphicGroup(graphic_item=options.GraphicItem(top="50px"))
                         )
 
     bar.reversal_axis()
@@ -76,9 +82,15 @@ def hotSearch_bar(data):
 # 绘制热搜趋势折线图
 # 热搜趋势-阅读量
 def searchTrendRead_line(data):
-    line = Line(init_opts=options.InitOpts(width="1000px", height="450px"))
+    line = Line(init_opts=options.InitOpts(width="1000px", height="400px"))
     line.set_global_opts(title_opts=options.TitleOpts(title="热搜趋势-阅读量", pos_left="40%"),
-                         legend_opts=options.LegendOpts(is_show=True,  pos_left="15%", pos_top="10%", orient="vertical"),
+                         legend_opts=options.LegendOpts(is_show=True,
+                                                        pos_left="15%", pos_top="10%",
+                                                        orient="vertical",
+                                                        textstyle_opts=options.TextStyleOpts(color="#101712"),
+                                                        border_width=1,
+                                                        border_color="green",
+                                                        border_radius=5),
                          tooltip_opts=options.TooltipOpts(is_show=True, trigger="axis"),
                          datazoom_opts=options.DataZoomOpts(is_show=True, type_="inside"))
     line.add_xaxis(list(data["time"]))
@@ -89,16 +101,22 @@ def searchTrendRead_line(data):
     line.add_yaxis(data["word"][4], list(data["read"][4]))
 
     # 折线粗细
-    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=2))
+    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=3))
 
     return line
 
 
 # 热搜趋势-讨论量
 def searchTrendMention_line(data):
-    line = Line(init_opts=options.InitOpts(width="1000px", height="450px"))
+    line = Line(init_opts=options.InitOpts(width="1000px", height="400px"))
     line.set_global_opts(title_opts=options.TitleOpts(title="热搜趋势-讨论量", pos_left="40%"),
-                         legend_opts=options.LegendOpts(is_show=True, pos_left="15%", pos_top="10%", orient="vertical"),
+                         legend_opts=options.LegendOpts(is_show=True,
+                                                        pos_left="15%", pos_top="10%",
+                                                        orient="vertical",
+                                                        textstyle_opts=options.TextStyleOpts(color="#101712"),
+                                                        border_width=1,
+                                                        border_color="green",
+                                                        border_radius=5),
                          tooltip_opts=options.TooltipOpts(is_show=True, trigger="axis"),
                          datazoom_opts=options.DataZoomOpts(is_show=True, type_="inside"))
     line.add_xaxis(list(data["time"]))
@@ -109,16 +127,22 @@ def searchTrendMention_line(data):
     line.add_yaxis(data["word"][4], list(data["mention"][4]))
 
     # 折线粗细
-    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=2))
+    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=3))
 
     return line
 
 
 # 热搜趋势-原创人数
 def searchTrendOri_line(data):
-    line = Line(init_opts=options.InitOpts(width="1000px", height="450px"))
+    line = Line(init_opts=options.InitOpts(width="1000px", height="400px"))
     line.set_global_opts(title_opts=options.TitleOpts(title="热搜趋势-原创人数", pos_left="40%"),
-                         legend_opts=options.LegendOpts(is_show=True, pos_left="15%", pos_top="10%", orient="vertical"),
+                         legend_opts=options.LegendOpts(is_show=True,
+                                                        pos_left="15%", pos_top="10%",
+                                                        orient="vertical",
+                                                        textstyle_opts=options.TextStyleOpts(color="#101712"),
+                                                        border_width=1,
+                                                        border_color="green",
+                                                        border_radius=5),
                          tooltip_opts=options.TooltipOpts(is_show=True, trigger="axis"),
                          datazoom_opts=options.DataZoomOpts(is_show=True, type_="inside"))
     line.add_xaxis(list(data["time"]))
@@ -129,7 +153,7 @@ def searchTrendOri_line(data):
     line.add_yaxis(data["word"][4], list(data["ori"][4]))
 
     # 折线粗细
-    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=2))
+    line.set_series_opts(linestyle_opts=options.LineStyleOpts(width=3))
 
     return line
 
@@ -178,6 +202,7 @@ def get_hotSearch_bar():
     # data = pd.read_csv("spider/weibo/files/hotSearch.csv", encoding="utf-8")
     result = db.session.execute(
         text("select * from hotSearch where timeStamp in (select max(timeStamp) from hotSearch)")).fetchall()
+    db.session.commit()
     # data = [{"word": row[1], "hot": row[2], "href": row[3], "timeStamp": row[4]} for row in result]
     word = []
     hot = []
@@ -189,7 +214,7 @@ def get_hotSearch_bar():
         href.append(i[3])
         timeStamp.append(i[4])
     data = {"word": word, "hot": hot, "href": href, "timeStamp": timeStamp}
-    # print(data)
+    print(data)
 
     c = hotSearch_bar(data)
     return c.dump_options_with_quotes()
@@ -200,6 +225,7 @@ def topicData():
     result = db.session.execute(text(
         "select * from topic where timeStamp in (select max(timeStamp) from topic)"
     )).fetchall()
+    db.session.commit()
     word = []
     summary = []
     read = []
@@ -214,20 +240,32 @@ def topicData():
         href.append(i[5])
         link.append(i[7])
     data = {"word": word, "summary": summary, "read": read, "mention": mention, "href": href, "link": link}
-
     return data
 
 
 # 实现页面跳转
-
 @app.route('/', methods=["GET", "POST"])
 def hello_world():
     return render_template("index.html")
 
 
-@app.route("/hotSearchPage")
+@app.route("/hotSearchPage", methods=["GET", "POST"])
 def hotSearchPage():
-    return render_template("hotsearch.html")
+    d = db.session.execute(
+        text(f"select * from searchTrend order by timestamp desc limit 10")
+    )
+    db.session.commit()
+    if request.method == "POST":
+        key = request.form["search"]
+        if len(key) == 0:
+            pass
+        else:
+            data = db.session.execute(
+                text(f"select * from searchTrend where word like '%{key}%'")
+            ).fetchall()
+            db.session.commit()
+            return render_template("hotsearch.html", data=data)
+    return render_template("hotsearch.html", data=d)
 
 
 @app.route("/topicPage", methods=["GET", "POST"])

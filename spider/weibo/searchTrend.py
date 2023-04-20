@@ -42,6 +42,7 @@ def queryData():
         word.append(i[0])
         href.append(i[1])
         trend.append(i[2])
+
     return word, trend
 
 

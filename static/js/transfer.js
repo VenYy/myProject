@@ -26,7 +26,8 @@ function turnBg() {
         var link = links[i];
         // console.log(link.baseURI)
         if (link.getAttribute("href") === currentUrl) {
-            link.style.backgroundColor = "#d9961d"
+            link.style.color = "#373638"
+            link.style.backgroundColor = "#ebeced"
         }
     }
 }

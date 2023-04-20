@@ -120,11 +120,13 @@ class SearchTrend(Base):
     word = Column(String(32), primary_key=True)
     href = Column(Text, default="")
     trend = Column(Text, default="")
+    timeStamp = Column(DateTime, default=datetime.utcnow())
 
     def __repr__(self):
-        return f"word={self.word}, href={self.href}, trend={self.trend}"
+        return f"word={self.word}, href={self.href}, trend={self.trend}, timeStamp={self.timeStamp}"
 
-    def __init__(self, word, href="", trend=""):
+    def __init__(self, word, href="", trend="", timeStamp=datetime.utcnow()):
         self.word = word
         self.href = href
         self.trend = trend
+        self.timeStamp = timeStamp

@@ -16,10 +16,23 @@
 
     <div class="main">
         <div class="hot_search" id="hot_search"></div>
-        <div class="trend" id="trend">
-            <div class="read" id="read"></div>
-            <div class="mention" id="mention"></div>
-            <div class="ori" id="ori"></div>
+        <div class="read" id="read"></div>
+        <div class="mention" id="mention"></div>
+        <div class="ori" id="ori"></div>
+        <div class="searchContent" id="searchContent">
+            <form action="{{ url_for("hotSearchPage") }}" method="POST">
+                <label for="search">
+                    <input type="text" placeholder="输入关键字" name="search">
+                    <button type="submit">搜索</button>
+                </label>
+            </form>
+            {% if data %}
+                <ul>
+                    {% for d in data %}
+                        <li><a href={{ d[1] }}>{{ d[0] }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
     </div>
     <script src="../static/js/showHotSearch.js"></script>
