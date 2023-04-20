@@ -10,6 +10,8 @@ function topic() {
             // $("#read").html("阅读量："+ data["data"][0]["阅读量"])
             var str = ""
             for (let i = 0; i < data["word"].length; i++) {
+                var word = data['word'][i]
+                var href = data['href'][i]
                 // str += "<div class='topic' id='topic'>" + "<a href='" + data['data'][i]['链接'] + "'>"
                 str += `<div class='topic' id='topic' data-read=${data['read'][i]} data-mention=${data['mention'][i]}>`
                 str += `<p id='word'>${data['word'][i]}</p>`
@@ -21,8 +23,6 @@ function topic() {
                     str += `<p id='mention'>讨论量：${data['mention'][i]} </p>`
                 }
                 str += `<p id='read'>阅读量：` + data['read'][i] + "</p>"
-                var word = data['word'][i]
-                var href = data['href'][i]
                 str += `<a class='transPage' id='from' href=${data['link'][i]} >微博页面</a>`
                 // str += "</a></div>"
                 str += "</div>"
@@ -80,14 +80,14 @@ function sortMention() {
 
 // 按照阅读量排序
 var ascRead = true
+
 function sortRead() {
     var topics = $.makeArray($(".topics .topic"))
     if (ascRead) {
         topics.sort(function (a, b) {
             return $(b).data("read") - $(a).data("read")
         })
-    }
-    else {
+    } else {
         topics.sort(function (a, b) {
             return $(a).data("read") - $(b).data("read")
         })

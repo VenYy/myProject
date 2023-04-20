@@ -1,6 +1,6 @@
 import time
 
-from spider.weibo import hotTopic, analyse, hotSearch, searchTrend
+from spider.weibo import hotTopic, analyse, hotSearch, searchTrend, topicDetail
 
 if __name__ == '__main__':
     count = 1
@@ -8,9 +8,11 @@ if __name__ == '__main__':
         print(f"第{count}次执行")
 
         hotTopic.run()
+        topicDetail.run()
         hotSearch.run()
-        analyse.run()
         searchTrend.run()
+
+        analyse.run()
 
         count += 1
 

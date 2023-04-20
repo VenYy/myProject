@@ -3,10 +3,31 @@
     width: 300px;
     height: 300px;
     top: 30%;
-    left: 35%;
+    left: 42%;
     align-items: center;
 
 }
 
+td {
+    padding: 0 20px;
+}
 
+.content {
+    display: -webkit-box;
+    /*设置显示最大行数*/
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    /*超出部分隐藏，用...代替*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 500px;
+}
 
+table a {
+    text-decoration: none;
+    color: #303030;
+}
+
+table a:hover {
+    font-weight: bold;
+}

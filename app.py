@@ -8,9 +8,12 @@ from pyecharts import options
 from pyecharts.globals import ThemeType
 from spider.weibo.DBManager import *
 from spider.weibo.searchTrend import *
-
+# from flask_cors import CORS
 
 app = Flask(__name__)
+# 启用CORS允许跨域请求
+# CORS(app)
+
 """
 DB_URI = "mysql+pymysql://root:0226@127.0.0.1:3306/weibo"
 app.config["SQLALCHEMY_DATABASE_URI"] = DB_URI
@@ -188,7 +191,7 @@ def searchTrend():
         mention.append(m)
         ori.append(o)
     data = {"word": word, "read": read, "mention": mention, "ori": ori, "time": time}
-
+    print(data)
     readLine = searchTrendRead_line(data)
     mentionLine = searchTrendMention_line(data)
     oriLine = searchTrendOri_line(data)
@@ -280,7 +283,13 @@ def othersPage():
 
 @app.route("/topic/<word>", methods=["POST", "GET"])
 def detailTopic(word):
-    return render_template("detailTopic.html", word=word)
+    data = db.session.execute(
+        text(f"select * from topicDetail where topic_name = '{word}'")
+    ).fetchall()
+    db.session.commit()
+    print(data)
+
+    return render_template("detailTopic.html", word=word, data=data)
 
 
 if __name__ == '__main__':

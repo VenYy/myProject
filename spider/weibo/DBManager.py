@@ -56,7 +56,7 @@ class DBManager:
         if self.has_table(tableName):
             try:
                 table = Table(tableName, self.metadata, autoload_with=self.engine)
-                print(table)
+                # print(table)
                 if table is not None:
                     Base.metadata.drop_all(self.engine, [table], checkfirst=True)
                     print("delete %s success" % tableName)
@@ -129,4 +129,38 @@ class SearchTrend(Base):
         self.word = word
         self.href = href
         self.trend = trend
+        self.timeStamp = timeStamp
+
+
+class TopicDetail(Base):
+    __tablename__ = "topicDetail"
+    mid = Column(String(16), primary_key=True)
+    detail_url = Column(Text, default="")
+    screen_name = Column(String(32), default="")
+    followers_count = Column(String(10), default="")
+    status_province = Column(String(10), default="")
+    type = Column(String(20), default="")
+    topic_name = Column(String(32), default="")
+    attitudes_count = Column(Integer, default=0)
+    comments_count = Column(Integer, default=0)
+    reposts_count = Column(Integer, default=0)
+    text = Column(Text, default="")
+    timeStamp = Column(DateTime, default=datetime.utcnow())
+
+    def __init__(self, mid, detail_url="",
+                 screen_name="", followers_count="", status_province="",
+                 type_="", topic_name="",
+                 attitudes_count=None, comments_count=None, reposts_count=None,
+                 text_="", timeStamp=datetime.utcnow()):
+        self.mid = mid
+        self.detail_url = detail_url
+        self.screen_name = screen_name
+        self.followers_count = followers_count
+        self.status_province = status_province
+        self.type = type_
+        self.topic_name = topic_name
+        self.attitudes_count = attitudes_count
+        self.comments_count = comments_count
+        self.reposts_count = reposts_count
+        self.text = text_
         self.timeStamp = timeStamp
