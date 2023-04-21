@@ -40,7 +40,7 @@ def solve():
                     followers_count = j["card_group"][0]["mblog"]["user"]["followers_count"]  # 粉丝数
 
                     topic_name = j["card_group"][0]["actionlog"]["ext"]  # 话题名称
-                    topic_name = "".join(re.findall("[\u4e00-\u9fa5]", topic_name))
+                    topic_name = "".join(re.findall(r"#(.*?)#", topic_name))
                     type = j["card_group"][0]["mblog"]["page_info"]["type"]  # 类型
 
                     text = j["card_group"][0]["mblog"]["text"]  # 内容

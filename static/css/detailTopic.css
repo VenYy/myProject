@@ -8,6 +8,16 @@
 
 }
 
+.charts {
+    margin-top: 30px;
+    /*position: absolute;*/
+}
+.pie {
+    width: 900px;
+    height: 400px;
+}
+
+
 .divTable {
     display: table;
     border-collapse: collapse;
@@ -48,9 +58,14 @@
 }
 
 .divTable a:hover {
-    color: darkslateblue;
+    color: mediumblue;
 }
 
+/*表头的样式*/
+.row:first-of-type {
+    font-weight: bold;
+    font-size: 17px;
+}
 
 #hidden {
     display: none;

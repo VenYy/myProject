@@ -3,11 +3,12 @@ import json
 import os
 
 from flask import Flask, render_template, url_for, redirect, jsonify, request
-from pyecharts.charts import Bar, Timeline, Grid, Line
+from pyecharts.charts import Bar, Timeline, Grid, Line, Pie
 from pyecharts import options
 from pyecharts.globals import ThemeType
 from spider.weibo.DBManager import *
 from spider.weibo.searchTrend import *
+
 # from flask_cors import CORS
 
 app = Flask(__name__)
@@ -43,7 +44,7 @@ def hotSearch_bar(data):
                                                      color="yellow",
                                                      font_weight="bold"))
     bar.set_global_opts(title_opts=options.TitleOpts(title="微博热搜排行榜", pos_left="40%",
-                                                     subtitle="更新时间："+str(data["timeStamp"][0]),
+                                                     subtitle="更新时间：" + str(data["timeStamp"][0]),
                                                      subtitle_textstyle_opts={"color": "darkgreen"}
                                                      ),
                         # 坐标轴配置项
@@ -64,8 +65,8 @@ def hotSearch_bar(data):
                                                          ),
                         # 区域缩放
                         datazoom_opts=options.DataZoomOpts(is_show=True,
-                                                           type_="inside",          # 组件类型
-                                                           orient="vertical"        # 垂直
+                                                           type_="inside",  # 组件类型
+                                                           orient="vertical"  # 垂直
                                                            ),
                         # 视觉映射
                         visualmap_opts=options.VisualMapOpts(is_show=True, type_="color",
@@ -161,7 +162,7 @@ def searchTrendOri_line(data):
     return line
 
 
-@app.route("/searchTrendData")
+@app.route("/api/searchTrendData")
 def searchTrend():
     with open("spider/weibo/files/trend.json", "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -200,7 +201,7 @@ def searchTrend():
             oriLine.dump_options_with_quotes()]
 
 
-@app.route("/hotSearchData")
+@app.route("/api/hotSearchData")
 def get_hotSearch_bar():
     # data = pd.read_csv("spider/weibo/files/hotSearch.csv", encoding="utf-8")
     result = db.session.execute(
@@ -223,7 +224,7 @@ def get_hotSearch_bar():
     return c.dump_options_with_quotes()
 
 
-@app.route("/topicData")
+@app.route("/api/topicData")
 def topicData():
     result = db.session.execute(text(
         "select * from topic where timeStamp in (select max(timeStamp) from topic)"
@@ -281,15 +282,62 @@ def othersPage():
     return render_template("others.html")
 
 
-@app.route("/topic/<word>", methods=["POST", "GET"])
-def detailTopic(word):
+@app.route("/topic/api/<word>", methods=["POST", "GET"])
+def detailTopicApi(word):
     data = db.session.execute(
         text(f"select * from topicDetail where topic_name = '{word}'")
     ).fetchall()
     db.session.commit()
-    print(data)
+    result = []
 
-    return render_template("detailTopic.html", word=word, data=data)
+    for i in data:
+        result.append({"mid": i[0],
+                       "detail_url": i[1],
+                       "screen_name": i[2],
+                       "gender": i[4],
+                       "profile_url": i[5],
+                       "followers_count": i[6],
+                       "status_province": i[7],
+                       "topic_name": i[9],
+                       "attitudes_count": i[10],
+                       "comments_count": i[11],
+                       "reposts_count": i[12],
+                       "text": i[13],
+                       "timeStamp": i[14]})
+
+    gender = [i[4] for i in data]
+    province = [i[7] for i in data]
+
+    gender_counts = [(g, gender.count(g)) for g in set(gender)]
+    province_counts = sorted([(p, province.count(p)) for p in set(province)], key=lambda x: x[1])[::-1]
+    if len(province_counts) > 5:
+        province_counts = province_counts[:5]
+    else:
+        pass
+    print(province_counts)
+
+    pie = (Pie(init_opts=options.InitOpts(theme=ThemeType.MACARONS))
+           .add("", gender_counts,
+                rosetype="radius",  # 南丁格尔玫瑰图
+                center=["20%", "50%"],
+                radius="60%")
+           .add("", province_counts,
+                rosetype="radius",
+                center=["70%", "50%"],
+                radius="60%", )
+           .set_global_opts(title_opts=options.TitleOpts(title=word, pos_left="5%",
+                                                         title_link="",
+                                                         title_textstyle_opts=options.TextStyleOpts(font_size=20,
+                                                                                                    font_weight="bold")),
+                            legend_opts=options.LegendOpts(pos_right="10%"))
+           .set_series_opts()
+           )
+    return [result, pie.dump_options_with_quotes()]
+
+
+@app.route("/topic/<word>", methods=["GET", "POST"])
+def detailTopic(word):
+    return render_template("detailTopic.html", word=word)
 
 
 if __name__ == '__main__':

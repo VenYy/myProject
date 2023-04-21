@@ -1,7 +1,7 @@
 function topic() {
     $.ajax({
         type: "GET",
-        url: "http://127.0.0.1:5000/topicData",
+        url: "http://127.0.0.1:5000/api/topicData",
         dataType: "json",
         success: function (data) {
             // $("#word").html(data["data"][0]["话题名称"])

@@ -12,6 +12,7 @@ body {
     /*top: 0;*/
     /*left: 0;*/
     background-color: rgb(51, 58, 64);
+    z-index: 999;
 }
 
 .logo {
