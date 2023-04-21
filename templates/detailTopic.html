@@ -10,34 +10,32 @@
 <div class="main" style="display: none" id="main">
     <h2 id="word">{{ word }}</h2>
     <div class="articles">
-        <table>
-            <tr>
-                <td>发布者</td>
-                <td>粉丝数</td>
-                <td>所在地区</td>
-                <td>正文</td>
-                <td>点赞数</td>
-                <td>评论数</td>
-                <td>转发数</td>
-                <td>发布时间</td>
-            </tr>
-                {% for i in data %}
-            <tr>
+        <div class="divTable">
+            <div class="row">
+                <div class="cell">发布者</div>
+                <div class="cell">粉丝数</div>
+                <div class="cell">所在地区</div>
+                <div class="cell">正文</div>
+                <div class="cell">点赞数</div>
+                <div class="cell">评论数</div>
+                <div class="cell">转发数</div>
+                <div class="cell">发布时间</div>
+            </div>
+            {% for i in data %}
+                <div class="row">
+                    <div class="cell"><a href="{{ i[4] }}">{{ i[2] }}</a></div>
+                    <div class="cell">{{ i[5] }}</div>
+                    <div class="cell">{{ i[6] }}</div>
+                    <div class="cell" id="text"><a href="{{ i[1] }}">{{ i[12] }}</a></div>
+                    <div class="cell">{{ i[9] }}</div>
+                    <div class="cell">{{ i[10] }}</div>
+                    <div class="cell">{{ i[11] }}</div>
+                    <div class="cell">{{ i[13] }}</div>
+                </div>
 
-                    <td>{{ i[2] }}</td>                             {# 发布者 #}
-                    <td>{{ i[3] }}</td>                             {# 粉丝数 #}
-                    <td>{{ i[4] }}</td>                             {# 所在地区 #}
-                    <td class="content"><a href="{{ i[1] }}">{{ i[10] }}</a></td>            {# 正文 #}
-                    <td>{{ i[7] }}</td>                             {# 点赞数 #}
-                    <td>{{ i[8] }}</td>                             {# 评论数 #}
-                    <td>{{ i[9] }}</td>                             {# 转发数 #}
-                    <td>{{ i[11] }}</td>                            {# 发布时间 #}
-            </tr>
+            {% endfor %}
 
-                {% endfor %}
-        </table>
-
-
+        </div>
     </div>
 
 </div>

@@ -55,10 +55,14 @@ def saveDetailToDB(path):
         d = [i[0] for i in db.session.execute(text("select mid from topicDetail")).fetchall()]
         # print(d)
         for row in reader:
-            # print(row["mid"])
+            '''
+            如果主键不存在，则添加数据，否则修改数据
+            '''
             if row["mid"] not in d:
                 topicDetail = TopicDetail(mid=row["mid"], detail_url=row["detail_url"],
-                                          screen_name=row["screen_name"], followers_count=row["followers_count"],
+                                          screen_name=row["screen_name"],
+                                          uid=row["uid"], profile_url=row["profile_url"],
+                                          followers_count=row["followers_count"],
                                           status_province=row["status_province"],
                                           type_=row["type"], topic_name=row["topic_name"],
                                           attitudes_count=row["attitudes_count"], comments_count=row["comments_count"],
@@ -66,7 +70,14 @@ def saveDetailToDB(path):
                                           text_=row["text"], timeStamp=row["timeStamp"])
                 db.add_data(topicDetail)
                 db.session.commit()
-
+            else:
+                db.update_table("topicDetail", mid=row["mid"],
+                                # uid=row["uid"],
+                                # profile_url=row["profile_url"],
+                                attitudes_count=row["attitudes_count"],
+                                comments_count=row["comments_count"],
+                                reposts_count=row["reposts_count"])
+                db.session.commit()
         print("Save topic detail to database success")
 
 
@@ -76,7 +87,6 @@ def run():
     saveTrendToDB("./files/searchTrend.csv")
     saveDetailToDB("./files/topicDetail.csv")
     print("Saving to DB....")
-
 
 
 # run()

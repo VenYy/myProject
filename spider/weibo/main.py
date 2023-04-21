@@ -11,7 +11,6 @@ if __name__ == '__main__':
         topicDetail.run()
         hotSearch.run()
         searchTrend.run()
-
         analyse.run()
 
         count += 1

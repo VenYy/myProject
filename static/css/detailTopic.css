@@ -8,26 +8,45 @@
 
 }
 
-td {
-    padding: 0 20px;
+.divTable {
+    display: table;
+    border-collapse: collapse;
+
 }
 
-.content {
+.row {
+    display: table-row;
+}
+
+.cell {
+    height: 40px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #cccccc;
+    padding: 0 15px 0 10px;
+
+}
+
+
+#text {
     display: -webkit-box;
     /*设置显示最大行数*/
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     /*超出部分隐藏，用...代替*/
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 500px;
+    font-size: 14px;
+    line-height: 1.5em;
 }
 
-table a {
+.divTable a {
     text-decoration: none;
     color: #303030;
 }
 
-table a:hover {
-    font-weight: bold;
+.divTable a:hover {
+    color: darkslateblue;
 }

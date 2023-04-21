@@ -30,7 +30,7 @@ def parse():
             mention = c["mention"]  # 讨论量
             timeStamp = datetime.now().strftime("%Y-%m-%d %H:%M")  # 时间
             # href = f"https://m.weibo.cn/p/index?containerid=231522type%3D60%26q%3D{topic}%26t%3D0&title=热门-"
-            href = f"https://m.weibo.cn/api/container/getIndex?containerid=231522type%3D60%26q%3D%23{topic}%23%26t%3D10&title=%E7%83%AD%E9%97%A8-%23{topic}%23"
+            href = f"https://m.weibo.cn/api/container/getIndex?containerid=231522type%3D1%26q%3D%23{topic}%23%26t%3D10&title=%E7%83%AD%E9%97%A8-%23{topic}%23"
             link = f"https://s.weibo.com/weibo?q=%23{topic}%23"
             topic_dic = {"word": topic, "summary": summary, "read": read, "mention": mention, "href": href,
                          "link": link, "time_stamp": timeStamp}

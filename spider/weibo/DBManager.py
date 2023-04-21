@@ -68,13 +68,28 @@ class DBManager:
         else:
             print(f"No table named: {tableName}")
 
+    # 修改表数据
+    def update_table(self, tableName, mid, **kwargs):
+        try:
+            table = Table(tableName, self.metadata, autoload_with=self.engine)
+            sql = (table.update()
+                   # .c表示获取Table对象的column属性
+                   .where(table.c.mid == mid)
+                   .values(**kwargs))
+            self.session.execute(sql)
+            print(f"Update table with values: {kwargs}")
+            print(f"Update table: {tableName} success where mid: {mid}")
+        except Exception as e:
+            print("Error when updating data: ", e)
+            self.session.rollback()
+
 
 # 创建映射(创建表)
 # 生成一个SQLORM基类，创建表必须继承
 
 class Topic(Base):
     __tablename__ = "topic"
-    Id = Column(Integer, primary_key=True, autoincrement=True)
+    mid = Column(Integer, primary_key=True, autoincrement=True)
     word = Column(String(32), nullable=False)
     summary = Column(Text)
     read = Column(Integer, default=0)
@@ -99,7 +114,7 @@ class Topic(Base):
 
 class HotSearch(Base):
     __tablename__ = "hotSearch"
-    Id = Column(Integer, primary_key=True, autoincrement=True)
+    mid = Column(Integer, primary_key=True, autoincrement=True)
     word = Column(String(32), nullable=False)
     hot = Column(Integer, default=0)
     href = Column(Text, default="")
@@ -134,9 +149,11 @@ class SearchTrend(Base):
 
 class TopicDetail(Base):
     __tablename__ = "topicDetail"
-    mid = Column(String(16), primary_key=True)
+    mid = Column(String(16), primary_key=True, unique=True)
     detail_url = Column(Text, default="")
     screen_name = Column(String(32), default="")
+    uid = Column(String(10), default="")
+    profile_url = Column(Text, default="")
     followers_count = Column(String(10), default="")
     status_province = Column(String(10), default="")
     type = Column(String(20), default="")
@@ -148,13 +165,16 @@ class TopicDetail(Base):
     timeStamp = Column(DateTime, default=datetime.utcnow())
 
     def __init__(self, mid, detail_url="",
-                 screen_name="", followers_count="", status_province="",
+                 screen_name="", uid="", profile_url="",
+                 followers_count="", status_province="",
                  type_="", topic_name="",
                  attitudes_count=None, comments_count=None, reposts_count=None,
                  text_="", timeStamp=datetime.utcnow()):
         self.mid = mid
         self.detail_url = detail_url
         self.screen_name = screen_name
+        self.uid = uid
+        self.profile_url = profile_url
         self.followers_count = followers_count
         self.status_province = status_province
         self.type = type_

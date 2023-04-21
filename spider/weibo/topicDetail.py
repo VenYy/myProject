@@ -26,6 +26,8 @@ def solve():
                     mid = j["mblog"]["mid"]                                         # 唯一ID
                     detail_url = f"https://m.weibo.cn/detail/{mid}"
                     screen_name = j["mblog"]["user"]["screen_name"]                 # 博主昵称
+                    uid = j["mblog"]["user"]["id"]                                  # 博主ID
+                    profile_url = j["mblog"]["user"]["profile_url"]                 # 博主主页
                     followers_count = j["mblog"]["user"]["followers_count"]         # 粉丝数
 
                     topic_name = j["actionlog"]["ext"]                              # 话题名称
@@ -35,7 +37,7 @@ def solve():
                     text = j["mblog"]["text"]                               # 内容
                     # 匹配所有中文字符和符号
                     res = re.findall(
-                        "[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\u4e00-\u9fa5]", text)
+                        "[\uff01\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\u4e00-\u9fa5]", text)
                     result = ''.join(res).rstrip("全文").lstrip(topic_name).rstrip("网页链接")                             # 正文
 
                     time = datetime.strptime(j["mblog"]["created_at"], "%a %b %d %H:%M:%S %z %Y")
@@ -44,6 +46,8 @@ def solve():
                     resData.append({"mid": mid,                                     # 唯一ID
                                     "detail_url": detail_url,                       # 博文链接
                                     "screen_name": screen_name,                     # 博主昵称
+                                    "uid": uid,                                     # 博主ID
+                                    "profile_url": profile_url,                     # 博主主页
                                     "followers_count": followers_count,             # 粉丝数
                                     "status_province": status_province,             # 所在地区
                                     "type": type,                                   # 博文类型
@@ -63,7 +67,9 @@ def solve():
 
 def saveToCSV(resData):
     with open("./files/topicDetail.csv", "w", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["mid", "detail_url", "screen_name", "followers_count",
+        writer = csv.DictWriter(f, fieldnames=["mid", "detail_url",
+                                               "screen_name", "uid", "profile_url",
+                                               "followers_count",
                                                "status_province", "type", "topic_name",
                                                "attitudes_count", "comments_count", "reposts_count",
                                                "text", "timeStamp"])
