@@ -153,6 +153,7 @@ class TopicDetail(Base):
     detail_url = Column(Text, default="")
     screen_name = Column(String(32), default="")
     uid = Column(String(10), default="")
+    gender = Column(String(5), default="未知")
     profile_url = Column(Text, default="")
     followers_count = Column(String(10), default="")
     status_province = Column(String(10), default="")
@@ -165,7 +166,7 @@ class TopicDetail(Base):
     timeStamp = Column(DateTime, default=datetime.utcnow())
 
     def __init__(self, mid, detail_url="",
-                 screen_name="", uid="", profile_url="",
+                 screen_name="", uid="", gender="未知", profile_url="",
                  followers_count="", status_province="",
                  type_="", topic_name="",
                  attitudes_count=None, comments_count=None, reposts_count=None,
@@ -174,6 +175,7 @@ class TopicDetail(Base):
         self.detail_url = detail_url
         self.screen_name = screen_name
         self.uid = uid
+        self.gender = gender
         self.profile_url = profile_url
         self.followers_count = followers_count
         self.status_province = status_province

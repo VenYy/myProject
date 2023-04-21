@@ -13,6 +13,7 @@
         <div class="divTable">
             <div class="row">
                 <div class="cell">发布者</div>
+                <div class="cell">性别</div>
                 <div class="cell">粉丝数</div>
                 <div class="cell">所在地区</div>
                 <div class="cell">正文</div>
@@ -23,19 +24,23 @@
             </div>
             {% for i in data %}
                 <div class="row">
-                    <div class="cell"><a href="{{ i[4] }}">{{ i[2] }}</a></div>
-                    <div class="cell">{{ i[5] }}</div>
+                    <div class="cell"><a href="{{ i[5] }}">{{ i[2] }}</a></div>
+                    <div class="cell">{{ i[4] }}</div>
                     <div class="cell">{{ i[6] }}</div>
-                    <div class="cell" id="text"><a href="{{ i[1] }}">{{ i[12] }}</a></div>
-                    <div class="cell">{{ i[9] }}</div>
+                    <div class="cell">{{ i[7] }}</div>
+                    <div class="cell" id="text"><a href="{{ i[1] }}">{{ i[13] }}</a></div>
                     <div class="cell">{{ i[10] }}</div>
                     <div class="cell">{{ i[11] }}</div>
-                    <div class="cell">{{ i[13] }}</div>
+                    <div class="cell">{{ i[12] }}</div>
+                    <div class="cell">{{ i[14] }}</div>
                 </div>
 
             {% endfor %}
 
         </div>
+    </div>
+    <div class="pie">
+        <div id="hidden">{{ data }}</div>
     </div>
 
 </div>

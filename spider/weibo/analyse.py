@@ -58,26 +58,33 @@ def saveDetailToDB(path):
             '''
             如果主键不存在，则添加数据，否则修改数据
             '''
-            if row["mid"] not in d:
-                topicDetail = TopicDetail(mid=row["mid"], detail_url=row["detail_url"],
-                                          screen_name=row["screen_name"],
-                                          uid=row["uid"], profile_url=row["profile_url"],
-                                          followers_count=row["followers_count"],
-                                          status_province=row["status_province"],
-                                          type_=row["type"], topic_name=row["topic_name"],
-                                          attitudes_count=row["attitudes_count"], comments_count=row["comments_count"],
-                                          reposts_count=row["reposts_count"],
-                                          text_=row["text"], timeStamp=row["timeStamp"])
-                db.add_data(topicDetail)
-                db.session.commit()
-            else:
-                db.update_table("topicDetail", mid=row["mid"],
-                                # uid=row["uid"],
-                                # profile_url=row["profile_url"],
-                                attitudes_count=row["attitudes_count"],
-                                comments_count=row["comments_count"],
-                                reposts_count=row["reposts_count"])
-                db.session.commit()
+            try:
+                if row["mid"] not in d:
+                    topicDetail = TopicDetail(mid=row["mid"], detail_url=row["detail_url"],
+                                              screen_name=row["screen_name"],
+                                              uid=row["uid"], gender=row["gender"],
+                                              profile_url=row["profile_url"],
+                                              followers_count=row["followers_count"],
+                                              status_province=row["status_province"],
+                                              type_=row["type"], topic_name=row["topic_name"],
+                                              attitudes_count=row["attitudes_count"], comments_count=row["comments_count"],
+                                              reposts_count=row["reposts_count"],
+                                              text_=row["text"], timeStamp=row["timeStamp"])
+                    db.add_data(topicDetail)
+                    db.session.commit()
+                else:
+                    db.update_table("topicDetail", mid=row["mid"],
+                                    uid=row["uid"],
+                                    profile_url=row["profile_url"],
+                                    gender=row["gender"],
+                                    text=row["text"],
+                                    attitudes_count=row["attitudes_count"],
+                                    comments_count=row["comments_count"],
+                                    reposts_count=row["reposts_count"])
+                    db.session.commit()
+            except Exception as e:
+                print("Error when saving topic detail: ", e)
+                pass
         print("Save topic detail to database success")
 
 

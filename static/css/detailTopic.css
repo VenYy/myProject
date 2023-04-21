@@ -50,3 +50,8 @@
 .divTable a:hover {
     color: darkslateblue;
 }
+
+
+#hidden {
+    display: none;
+}
