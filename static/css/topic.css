@@ -62,7 +62,7 @@
 .filterBar button {
     font-size: 17px;
     height: 30px;
-    width: 90px;
+    width: 110px;
     border: none;
     margin-right: 30px;
     border-radius: 15px;
@@ -117,7 +117,7 @@
 
     text-align: center;
     border-radius: 10px;
-    box-shadow: darkgray 5px 5px 20px 5px;
+    box-shadow: darkgray 5px 5px 10px 5px;
 
     /*背景渐变过度效果*/
     background: linear-gradient(45deg, seashell, dodgerblue, sandybrown);

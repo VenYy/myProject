@@ -13,7 +13,8 @@ function topic() {
                 var word = data['word'][i]
                 var href = data['href'][i]
                 // str += "<div class='topic' id='topic'>" + "<a href='" + data['data'][i]['链接'] + "'>"
-                str += `<div class='topic' id='topic' data-read=${data['read'][i]} data-mention=${data['mention'][i]}>`
+                var publicTime = new Date(data["timeStamp"][i])
+                str += `<div class='topic' id='topic' data-read=${data['read'][i]} data-mention=${data['mention'][i]} data-publictime="${publicTime}">`
                 str += `<p id='word'>${data['word'][i]}</p>`
                 str += `<p id='summary'>${data['summary'][i]}</p>`
                 if (data['mention'][i] > 3000) {
@@ -94,6 +95,25 @@ function sortRead() {
     }
     $(".topics").empty().append(topics)
     ascRead = !ascRead
+}
+
+// 按照发布时间排序
+var ascTime = true
+function sortTime() {
+    var topics = $.makeArray($(".topics .topic"))
+    if (ascTime) {
+        topics.sort(function (a, b) {
+            // js大小写不敏感。。。。。驼峰命名无效
+            console.log(new Date($(b).data("publictime")) - new Date($(a).data("publictime")))
+            return new Date($(b).data("publictime")) - new Date($(a).data("publictime"))
+        })
+    } else {
+        topics.sort(function (a, b) {
+            return new Date($(a).data("publictime")) - new Date($(b).data("publictime"))
+        })
+    }
+    $(".topics").empty().append(topics)
+    ascTime = ! ascTime
 }
 
 

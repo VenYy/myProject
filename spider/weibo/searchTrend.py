@@ -65,11 +65,9 @@ def parseData(word, trend):
 
 
 def run():
-    os.chdir("/media/venyy/Codes/project/spider/weibo")
-    current_dir = os.getcwd()
     word, trend = queryData()
     data = parseData(word, trend)
-    spider.saveAsJson(f"{current_dir}/files/trend.json", data)
+    spider.saveAsJson(f"./files/trend.json", data)
 
 
 # run()

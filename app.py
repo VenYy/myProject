@@ -2,10 +2,11 @@ import csv
 import json
 import os
 
+import jieba
 from flask import Flask, render_template, url_for, redirect, jsonify, request
-from pyecharts.charts import Bar, Timeline, Grid, Line, Pie
+from pyecharts.charts import Bar, Timeline, Grid, Line, Pie, WordCloud
 from pyecharts import options
-from pyecharts.globals import ThemeType
+from pyecharts.globals import ThemeType, SymbolType
 from spider.weibo.DBManager import *
 from spider.weibo.searchTrend import *
 
@@ -227,7 +228,7 @@ def get_hotSearch_bar():
 @app.route("/api/topicData")
 def topicData():
     result = db.session.execute(text(
-        "select * from topic where timeStamp in (select max(timeStamp) from topic)"
+        "select * from topic group by word having link is not null order by timeStamp desc;"
     )).fetchall()
     db.session.commit()
     word = []
@@ -236,6 +237,7 @@ def topicData():
     mention = []
     href = []
     link = []
+    timeStamp = []
     for i in result:
         word.append(i[1])
         summary.append(i[2])
@@ -243,7 +245,8 @@ def topicData():
         mention.append(i[4])
         href.append(i[5])
         link.append(i[7])
-    data = {"word": word, "summary": summary, "read": read, "mention": mention, "href": href, "link": link}
+        timeStamp.append(i[6])
+    data = {"word": word, "summary": summary, "read": read, "mention": mention, "href": href, "link": link, "timeStamp": timeStamp}
     return data
 
 
@@ -314,12 +317,14 @@ def detailTopicApi(word):
         province_counts = province_counts[:5]
     else:
         pass
-    print(province_counts)
 
+    """
+    饼图（性别分布、所在地区分布）
+    """
     pie = (Pie(init_opts=options.InitOpts(theme=ThemeType.MACARONS))
            .add("", gender_counts,
                 rosetype="radius",  # 南丁格尔玫瑰图
-                center=["20%", "50%"],
+                center=["25%", "50%"],
                 radius="60%")
            .add("", province_counts,
                 rosetype="radius",
@@ -332,7 +337,30 @@ def detailTopicApi(word):
                             legend_opts=options.LegendOpts(pos_right="10%"))
            .set_series_opts()
            )
-    return [result, pie.dump_options_with_quotes()]
+    """
+    词云图
+    """
+    text_ = db.session.execute(text(
+        f"select text from topicDetail where topic_name = '{word}'"
+    )).fetchall()
+
+    txt = "。".join(i[0] for i in text_)
+    words = jieba.lcut(txt)
+    counts = {}
+    for word in words:
+        if len(word) == 1:
+            continue
+        else:
+            counts[word] = counts.get(word, 0) + 1
+    items = list(counts.items())
+    items.sort(key=lambda x: x[1], reverse=True)
+
+    wc = (WordCloud()
+          .add("", items, word_size_range=[20, 100], shape=SymbolType.TRIANGLE)
+          .set_global_opts(title_opts=options.TitleOpts(title=""))
+          )
+
+    return [result, pie.dump_options_with_quotes(), wc.dump_options_with_quotes()]
 
 
 @app.route("/topic/<word>", methods=["GET", "POST"])

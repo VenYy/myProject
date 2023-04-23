@@ -7,24 +7,28 @@
         <link rel="stylesheet" href="../static/css/detailTopic.css">
         <link rel="stylesheet" href="../static/css/index.css">
         <script src="../static/js/jquery.min.js"></script>
-        <script src="../static/js/echarts.min.js"></script>
+        <script src="../static/js/echarts.js"></script>
+
         <title>话题详情</title>
     </head>
 {% endblock %}
 {% block content %}
     <body>
-    <div class="main" style="display: none" id="main">
+    <div class="main" id="main">
         <input type="hidden" id="word" value="{{ word }}">
         <div class="charts">
             <div class="pie" id="pie"></div>
+            <div class="wordCloud" id="wordCloud"></div>
         </div>
-        <div class="divTable"></div>
-    </div>
+{#        <div class="hiddeBtn"><button id="hiddenBtn">显示/隐藏可能无用的信息</button></div>#}
+        <button id="hiddenBtn">显示/隐藏可能无用的信息</button>
+        <div class="divTable" id="divTable"></div>
     </div>
 
     <img src="../static/images/double_loading.svg" id="windowLoading" alt="loading....">
 
     </body>
     <script src="../static/js/detailTopic.js"></script>
+    <script src="../static/js/echarts-wordcloud.js"></script>
     </html>
 {% endblock %}

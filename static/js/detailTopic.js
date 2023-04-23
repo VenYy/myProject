@@ -1,7 +1,9 @@
 window.setTimeout(function () {
     window.document.getElementById("windowLoading").style.display = "none";
-    window.document.getElementById("main").style.display = "";
-}, 1000)
+    window.document.getElementById("wordCloud").style.display = "";
+}, 2000)
+
+
 
 var word = document.getElementById("word").value
 $.ajax({
@@ -23,12 +25,16 @@ $.ajax({
                 <div class="cell">发布时间</div>
                 </div>`
         for (let i = 0; i < data.length; i++) {
-            str += `<div class="row">
+            let hiddenRow = ""
+            if (((data[i]["attitudes_count"] < 3) && (data[i]["comments_count"] < 3)) || (data[i]["text"].length === 0)){
+                hiddenRow = "hidden"
+            }
+            str += `<div class="row ${hiddenRow}">
                     <div class="cell"><a href="${data[i]['profile_url']}">${data[i]['screen_name']}</a></div>
                     <div class="cell">${data[i]['gender']}</div>
                     <div class="cell">${data[i]['followers_count']}</div>
                     <div class="cell">${data[i]['status_province']}</div>
-                    <div class="cell" id="text"><a href="${data[i]['detail_url']}">${data[i]['text']}</a></div>
+                    <div class="cell" id="text"><a href="${data[i]['detail_url']}">${data[i]["text"]}</a></div>
                     <div class="cell">${data[i]['attitudes_count']}</div>
                     <div class="cell">${data[i]['comments_count']}</div>
                     <div class="cell">${data[i]["reposts_count"]}</div>
@@ -37,13 +43,26 @@ $.ajax({
         }
         $(".divTable").append(str)
 
-        // console.log(result[1])
         var genderChart = echarts.init(document.getElementById("pie"), {renderer: "canvas"})
         genderChart.setOption(JSON.parse(result[1]))
 
-        // var provinceChart = echarts.init(document.getElementById("provincePie"), {renderer: "canvas"})
-        // provinceChart.setOption(JSON.parse(result[2]))
+        console.log(JSON.parse(result[2]))
 
+        var wordCloudChart = echarts.init(document.getElementById("wordCloud"), {renderer: "canvas"})
+        wordCloudChart.setOption(JSON.parse(result[2]))
 
     }
 })
+
+
+// 隐藏或显示可能无用的信息
+window.onload = function () {
+    var button = document.getElementById("hiddenBtn")
+    button.onclick = function () {
+        const elements = document.querySelectorAll('.hidden');
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].style.display = (elements[i].style.display === 'none') ? 'table-row' : 'none';
+        }
+    }
+
+}

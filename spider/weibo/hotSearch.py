@@ -38,7 +38,6 @@ def parseData(html):
 
 
 def run():
-    os.chdir("/media/venyy/Codes/project/spider/weibo")
     current_dir = os.getcwd()
     hotSearchSpider = Spider()
     hotSearchSpider.url = "https://s.weibo.com/top/summary/"

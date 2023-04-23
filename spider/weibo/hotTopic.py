@@ -40,12 +40,10 @@ def parse():
 
 
 def saveCSV(data):
-    os.chdir("/media/venyy/Codes/project/spider/weibo")
-    current_dir = os.getcwd()
     # print(current_dir)
     item_list = ["word", "summary", "read", "mention", "href", "link", "time_stamp"]
     # print(data)
-    hotTopicSpider.saveAsCSV(path=f"{current_dir}/files/topic.csv", data=data, item_list=item_list)
+    hotTopicSpider.saveAsCSV(path=f"./files/topic.csv", data=data, item_list=item_list)
 
 
 # saveCSV()
@@ -59,7 +57,6 @@ def saveDetail(data):
         hotTopicSpider.url = url
         jsonData = hotTopicSpider.parse_json()
         # print(json["data"])
-        print("loading-----")
         try:
             # print(jsonData["data"]["cards"])
             if len(jsonData["data"]["cards"]) == 0:
@@ -69,6 +66,7 @@ def saveDetail(data):
         except Exception as e:
             print("Error: ", e)
             pass
+    print("loading.....")
     try:
         with open("./files/tmp.json", "w", encoding="utf-8") as f:
             jData = {"data": jsonList}
@@ -79,7 +77,6 @@ def saveDetail(data):
 
 
 def run():
-    os.chdir("/media/venyy/Codes/project/spider/weibo/")
     data = parse()
     saveCSV(data)
     print("Saving hotTopic....")

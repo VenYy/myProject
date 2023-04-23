@@ -15,7 +15,17 @@
 .pie {
     width: 900px;
     height: 400px;
+    float: left;
+    position: relative;
 }
+.wordCloud {
+    position: relative;
+    left: 900px;
+    width: 600px;
+    height: 400px;
+}
+
+
 
 
 .divTable {
@@ -27,6 +37,7 @@
 .row {
     display: table-row;
 }
+
 
 .cell {
     height: 40px;
@@ -49,7 +60,9 @@
     text-overflow: ellipsis;
     max-width: 500px;
     font-size: 14px;
-    line-height: 1.5em;
+    line-height: 1.7em;
+
+    padding: 10px 10px 10px 10px;
 }
 
 .divTable a {
@@ -67,6 +80,24 @@
     font-size: 17px;
 }
 
-#hidden {
+
+.hidden {
     display: none;
+}
+
+#hiddenBtn {
+    border: none;
+    background-color: #145daa;
+    color: white;
+    font-size: 13px;
+    width: 180px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: #373638 1px 1px 2px;
+
+}
+
+#hiddenBtn:active {
+    font-size: 14px;
 }
