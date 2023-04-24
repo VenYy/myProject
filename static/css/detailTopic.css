@@ -74,12 +74,14 @@
     color: mediumblue;
 }
 
+
 /*表头的样式*/
 .row:first-of-type {
     font-weight: bold;
     font-size: 17px;
+    height: 60px;
+    background-color: rgba(207, 213, 218, 0.43);
 }
-
 
 .hidden {
     display: none;

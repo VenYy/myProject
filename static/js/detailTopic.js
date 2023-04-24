@@ -26,7 +26,7 @@ $.ajax({
                 </div>`
         for (let i = 0; i < data.length; i++) {
             let hiddenRow = ""
-            if (((data[i]["attitudes_count"] < 3) && (data[i]["comments_count"] < 3)) || (data[i]["text"].length === 0)){
+            if (((data[i]["attitudes_count"] < 3) && (data[i]["comments_count"] < 3)) || (data[i]["text"].length < 3)){
                 hiddenRow = "hidden"
             }
             str += `<div class="row ${hiddenRow}">

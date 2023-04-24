@@ -15,7 +15,6 @@ def parseData(html):
     # print(len(hots), hots)
 
     timeStamp = datetime.now().strftime("%Y-%m-%d %H:%M")     # 时间
-
     result = []
     trendResult = []
 
@@ -38,14 +37,13 @@ def parseData(html):
 
 
 def run():
-    current_dir = os.getcwd()
     hotSearchSpider = Spider()
     hotSearchSpider.url = "https://s.weibo.com/top/summary/"
     html = hotSearchSpider.parse()
     data, trendResult = parseData(html)
-    hotSearchSpider.saveAsCSV(path=f"{current_dir}/files/hotSearch.csv", data=data,
+    hotSearchSpider.saveAsCSV(path=f"./files/hotSearch.csv", data=data,
                               item_list=["timeStamp", "word", "hot", "href"])
-    hotSearchSpider.saveAsCSV(path=f"{current_dir}/files/searchTrend.csv", data=trendResult,
+    hotSearchSpider.saveAsCSV(path=f"./files/searchTrend.csv", data=trendResult,
                               item_list=["word", "href", "trend", "timeStamp"])
     # hotSearchSpider.saveAsJson(path="./files/hotSearch.json", jData={"data": data})
     print("Saving hotSearch....")

@@ -1,10 +1,8 @@
-import os
-import time
-
 from sqlalchemy import text
 
-from spider.weibo.DBManager import DBManager, Topic, HotSearch, SearchTrend, TopicDetail
+from spider.weibo.DBManager import DBManager, Topic, HotSearch, SearchTrend, TopicDetail, Comments
 import csv
+
 
 db = DBManager()
 db.create_all()
@@ -122,11 +120,46 @@ def saveDetailToDB(path):
         print(f"topicDetail表共新增了{insertCount}条数据")
 
 
+def saveCommentsToDB(path):
+    with open(path, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        insertCount = 0
+        updateCount = 0
+        for row in reader:
+            existing_record = db.session.query(Comments).filter_by(comment_id=row["comment_id"]).first()
+            if existing_record is None:
+                comments = Comments(
+                    comment_id=row["comment_id"],
+                    screen_name=row["screen_name"],
+                    profile_url=row["profile_url"],
+                    source=row["source"],
+                    follow_count=row["follow_count"],
+                    followers_count=row["followers_count"],
+                    created_at=row["created_at"],
+                    text_=row["text"],
+                    mid=row["mid"]
+                )
+                db.add_data(comments)
+                db.session.commit()
+                insertCount += 1
+            else:
+                update_required = False
+                if existing_record.comment_id != row["comment_id"]:
+                    existing_record.comment_id = row["comment_id"]
+                if update_required:
+                    print(f"Updating: ", existing_record.comment_id)
+                    db.session.commit()
+                    updateCount += 1
+
+        print(f"comments表共更新了{updateCount}条数据")
+        print(f"comments表共新增了{insertCount}条数据")
+
 def run():
     saveHotSearchToDB("./files/hotSearch.csv")
     saveTopicToDB("./files/topic.csv")
     saveTrendToDB("./files/searchTrend.csv")
     saveDetailToDB("./files/test.csv")
+    saveCommentsToDB("./files/comments.csv")
 
 
-# run()
+run()

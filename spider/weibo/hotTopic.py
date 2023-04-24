@@ -41,7 +41,6 @@ def parse_():
     return data
 
 
-
 class TopicThread(threading.Thread):
     def __init__(self, url):
         # 重构run函数
@@ -126,7 +125,7 @@ def saveCSV(data):
 
 # saveCSV()
 
-
+'''
 def saveDetail(data):
     jsonList = []
     for i in data:
@@ -152,6 +151,7 @@ def saveDetail(data):
             print("Writing-----")
     except Exception as e:
         print("Error: ", e)
+'''
 
 
 def run():

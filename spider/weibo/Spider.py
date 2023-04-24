@@ -7,25 +7,27 @@ from lxml import etree
 headers = {
     "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 "
                   "Safari/537.36",
-    "cookie": "WBPSESS=qJtA5EKTVAmfo4ozVa9MnqvcR0zz7rHwqy8Cz3zSQ"
-              "-fuYQI67cm_6vqyKlGjiP94F6hqvKXCIQqCypSb5EqFpiGbkhoSM75UCnPQrfCi4f8BGEq5LZZV1kN_Oa3jUaiNtVUaaI4rrk21RA1t10SS_A==; SINAGLOBAL=3770871368101.858.1682216847804; UOR=,,login.sina.com.cn; XSRF-TOKEN=I5Gdsi1xs7QEQcWTL_uQJ3mg; PC_TOKEN=1872995fb3; login_sid_t=0b236c36923e8a685e43ad4d17d8da0a; cross_origin_proto=SSL; _s_tentry=passport.weibo.com; Apache=1845415765436.7375.1682294218663; ULV=1682294218668:3:3:3:1845415765436.7375.1682294218663:1682230949417; SCF=Ap1xha1wDXEMROVsZPqkRYk02OfrzUpAyhNjiuEBCsrB3tO39Avo7AlrAYSVr6zUNc28YQHZnajNXcRGWoyMCrU.; SUB=_2A25JQbWzDeRhGeFG6FIX-C7LyT-IHXVqNqB7rDV8PUNbmtANLWLmkW9NecZsSDz723rgdZyQvZzs8j6_R8vbPxUd; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5UsQWzFS7rHN-kXpM6N5vH5JpX5KzhUgL.FoMRe05c1h5Neoe2dJLoI79c9g44wHYt; ALF=1713830242; SSOLoginState=1682294243"
+    "cookie": "WEIBOCN_FROM=1110006030; loginScene=102003; "
+              "M_WEIBOCN_PARAMS=oid=4893995174724830&luicode=20000061&lfid=4893995174724830; "
+              "SUB=_2A25JQgQEDeRhGeBK7VoU8izJwziIHXVqzKxMrDV6PUJbkdANLWrakW1NR5N03BgZBQ_QBded0qd0LmXFaxaajtyJ; "
+              "_T_WM=74187438527; XSRF-TOKEN=3a7ff8; mweibo_short_token=620df02cf8; MLOGIN=1"
 }
 
 
 class Spider:
     def __init__(self):
         self.url = None
+        self.headers = headers
 
     def parse(self):
-        resp = requests.get(self.url, headers=headers)
+        resp = requests.get(self.url, headers=self.headers)
 
         resp.encoding = "utf-8"
-        # print(resp.text)
         html = etree.HTML(resp.text)
         return html
 
     def parse_json(self):
-        resp = requests.get(self.url, headers=headers)
+        resp = requests.get(self.url, headers=self.headers)
         # print(resp.status_code)
         resp.encoding = "utf-8"
         return resp.json()

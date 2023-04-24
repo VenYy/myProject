@@ -186,3 +186,29 @@ class TopicDetail(Base):
         self.reposts_count = reposts_count
         self.text = text_
         self.timeStamp = timeStamp
+
+
+class Comments(Base):
+    __tablename__ = "comments"
+    comment_id = Column(String(16), primary_key=True)
+    screen_name = Column(String(32), default=None)
+    profile_url = Column(Text, default=None)
+    source = Column(String(10), default=None)
+    follow_count = Column(String(10), default=None)
+    followers_count = Column(String(10), default=None)
+    created_at = Column(DateTime, default=datetime.utcnow())
+    text = Column(Text, default=None)
+    mid = Column(String(16), default=None)
+
+    def __init__(self, comment_id, screen_name=None, profile_url=None, source=None,
+                 follow_count=None, followers_count=None,
+                 created_at=None, text_=None, mid=None):
+        self.comment_id = comment_id
+        self.screen_name = screen_name
+        self.profile_url = profile_url
+        self.source = source
+        self.follow_count = follow_count
+        self.followers_count = followers_count
+        self.created_at = created_at
+        self.text = text_
+        self.mid = mid
