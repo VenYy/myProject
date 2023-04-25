@@ -3,11 +3,10 @@ import sys
 
 from tqdm import tqdm
 import time
-from spider.weibo import hotTopic, analyse, hotSearch, searchTrend, topicDetail
-
-os.chdir("/media/venyy/Codes/project/spider/weibo/")
+from spider.weibo import hotTopic, analyse, hotSearch, searchTrend, topicDetail, commentSpiderM
 
 if __name__ == '__main__':
+    os.chdir("/media/venyy/Codes/project/spider/weibo/")
     count = 1
     while True:
 
@@ -19,6 +18,9 @@ if __name__ == '__main__':
         hotSearch.run()
         searchTrend.run()
         analyse.run()
+
+        # commentSpiderM.run()
+
 
         end = time.time()
         print("用时：", end - start)

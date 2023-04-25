@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, create_engine, MetaData, Table, text
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import \
+    Column, Integer, String, Text, DateTime, create_engine, MetaData, Table, text, ForeignKey
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from sqlalchemy.engine.reflection import Inspector
 from datetime import datetime
 
@@ -88,15 +89,17 @@ class DBManager:
 # 生成一个SQLORM基类，创建表必须继承
 
 class Topic(Base):
-    __tablename__ = "topic"
-    mid = Column(Integer, primary_key=True, autoincrement=True)
-    word = Column(String(32), nullable=False)
-    summary = Column(Text)
-    read = Column(Integer, default=0)
-    mention = Column(Integer, default=0)
-    href = Column(Text)
-    link = Column(Text, default="")
-    timeStamp = Column(DateTime, default=datetime.utcnow())
+    __tablename__ = 'topic'
+
+    mid = Column(Integer, primary_key=True)
+    word = Column(String(32, 'utf8mb4_0900_ai_ci'), nullable=False)
+    summary = Column(Text(collation='utf8mb4_0900_ai_ci'))
+    read = Column(Integer)
+    mention = Column(Integer)
+    href = Column(Text(collation='utf8mb4_0900_ai_ci'))
+    timeStamp = Column(DateTime)
+    link = Column(Text)
+
 
     def __repr__(self):
         return f"word={self.word}, summary={self.summary}, read={self.read}, " \
@@ -113,12 +116,14 @@ class Topic(Base):
 
 
 class HotSearch(Base):
-    __tablename__ = "hotSearch"
-    mid = Column(Integer, primary_key=True, autoincrement=True)
-    word = Column(String(32), nullable=False)
-    hot = Column(Integer, default=0)
-    href = Column(Text, default="")
-    timeStamp = Column(DateTime, default=datetime.utcnow())
+    __tablename__ = 'hotSearch'
+
+    mid = Column(Integer, primary_key=True)
+    word = Column(String(32, 'utf8mb4_0900_ai_ci'), nullable=False)
+    hot = Column(Integer)
+    href = Column(Text(collation='utf8mb4_0900_ai_ci'))
+    timeStamp = Column(DateTime)
+
 
     def __repr__(self):
         return f"word={self.word}, hot={self.hot}, href={self.href}, timeStamp={self.timeStamp}"
@@ -131,11 +136,12 @@ class HotSearch(Base):
 
 
 class SearchTrend(Base):
-    __tablename__ = "searchTrend"
+    __tablename__ = 'searchTrend'
+
     word = Column(String(32), primary_key=True)
-    href = Column(Text, default="")
-    trend = Column(Text, default="")
-    timeStamp = Column(DateTime, default=datetime.utcnow())
+    href = Column(Text)
+    trend = Column(Text)
+    timeStamp = Column(DateTime)
 
     def __repr__(self):
         return f"word={self.word}, href={self.href}, trend={self.trend}, timeStamp={self.timeStamp}"
@@ -148,22 +154,23 @@ class SearchTrend(Base):
 
 
 class TopicDetail(Base):
-    __tablename__ = "topicDetail"
-    mid = Column(String(16), primary_key=True, unique=True)
-    detail_url = Column(Text, default="")
-    screen_name = Column(String(32), default="")
-    uid = Column(String(10), default="")
-    gender = Column(String(5), default="未知")
-    profile_url = Column(Text, default="")
-    followers_count = Column(String(10), default="")
-    status_province = Column(String(10), default="")
-    type = Column(String(20), default="")
-    topic_name = Column(String(32), default="")
-    attitudes_count = Column(Integer, default=0)
-    comments_count = Column(Integer, default=0)
-    reposts_count = Column(Integer, default=0)
-    text = Column(Text, default="")
-    timeStamp = Column(DateTime, default=datetime.utcnow())
+    __tablename__ = 'topicDetail'
+
+    mid = Column(String(16, 'utf8mb4_unicode_ci'), primary_key=True)
+    detail_url = Column(String(collation='utf8mb4_unicode_ci'))
+    screen_name = Column(String(32, 'utf8mb4_unicode_ci'))
+    uid = Column(String(10, 'utf8mb4_unicode_ci'))
+    gender = Column(String(5, 'utf8mb4_unicode_ci'), server_default=text("'未知'"))
+    profile_url = Column(String(collation='utf8mb4_unicode_ci'))
+    followers_count = Column(String(10, 'utf8mb4_unicode_ci'))
+    status_province = Column(String(10, 'utf8mb4_unicode_ci'))
+    type = Column(String(20, 'utf8mb4_unicode_ci'))
+    topic_name = Column(String(32, 'utf8mb4_unicode_ci'))
+    attitudes_count = Column(Integer)
+    comments_count = Column(Integer)
+    reposts_count = Column(Integer)
+    text = Column(String(collation='utf8mb4_unicode_ci'))
+    timeStamp = Column(DateTime)
 
     def __init__(self, mid, detail_url="",
                  screen_name="", uid="", gender="未知", profile_url="",
@@ -188,27 +195,28 @@ class TopicDetail(Base):
         self.timeStamp = timeStamp
 
 
-class Comments(Base):
-    __tablename__ = "comments"
-    comment_id = Column(String(16), primary_key=True)
-    screen_name = Column(String(32), default=None)
-    profile_url = Column(Text, default=None)
-    source = Column(String(10), default=None)
-    follow_count = Column(String(10), default=None)
-    followers_count = Column(String(10), default=None)
-    created_at = Column(DateTime, default=datetime.utcnow())
-    text = Column(Text, default=None)
-    mid = Column(String(16), default=None)
+class Comment(Base):
+    __tablename__ = 'comments'
+
+    comment_id = Column(String(16, 'utf8mb4_unicode_ci'), primary_key=True)
+    screen_name = Column(String(32, 'utf8mb4_unicode_ci'))
+    profile_url = Column(Text(collation='utf8mb4_unicode_ci'))
+    source = Column(String(10, 'utf8mb4_unicode_ci'))
+    created_at = Column(DateTime)
+    text = Column(Text(collation='utf8mb4_unicode_ci'))
+    like_count = Column(Integer)
+    mid = Column(ForeignKey('topicDetail.mid'), nullable=False, index=True)
+
+    topicDetail = relationship('TopicDetail')
+
 
     def __init__(self, comment_id, screen_name=None, profile_url=None, source=None,
-                 follow_count=None, followers_count=None,
-                 created_at=None, text_=None, mid=None):
+                 created_at=None, text_=None, like_count=None, mid=None):
         self.comment_id = comment_id
         self.screen_name = screen_name
         self.profile_url = profile_url
         self.source = source
-        self.follow_count = follow_count
-        self.followers_count = followers_count
         self.created_at = created_at
         self.text = text_
+        self.like_count = like_count
         self.mid = mid

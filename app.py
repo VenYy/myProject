@@ -193,7 +193,6 @@ def searchTrend():
         mention.append(m)
         ori.append(o)
     data = {"word": word, "read": read, "mention": mention, "ori": ori, "time": time}
-    print(data)
     readLine = searchTrendRead_line(data)
     mentionLine = searchTrendMention_line(data)
     oriLine = searchTrendOri_line(data)
@@ -254,6 +253,15 @@ def topicData():
 @app.route('/', methods=["GET", "POST"])
 def hello_world():
     return render_template("index.html")
+
+
+@app.route("/comments")
+def get_comments():
+    data = db.session.execute(
+        text("select * from comments")
+    ).fetchall()
+
+
 
 
 @app.route("/hotSearchPage", methods=["GET", "POST"])

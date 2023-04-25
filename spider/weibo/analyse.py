@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-from spider.weibo.DBManager import DBManager, Topic, HotSearch, SearchTrend, TopicDetail, Comments
+from spider.weibo.DBManager import DBManager, Topic, HotSearch, SearchTrend, TopicDetail, Comment
 import csv
 
 
@@ -66,6 +66,8 @@ def saveDetailToDB(path):
             '''
             try:
                 existing_record = db.session.query(TopicDetail).filter_by(mid=row["mid"]).first()
+                print(existing_record)
+
                 if existing_record is None:
                     topicDetail = TopicDetail(mid=row["mid"],
                                               detail_url=row["detail_url"],
@@ -126,9 +128,9 @@ def saveCommentsToDB(path):
         insertCount = 0
         updateCount = 0
         for row in reader:
-            existing_record = db.session.query(Comments).filter_by(comment_id=row["comment_id"]).first()
+            existing_record = db.session.query(Comment).filter_by(comment_id=row["comment_id"]).first()
             if existing_record is None:
-                comments = Comments(
+                comments = Comment(
                     comment_id=row["comment_id"],
                     screen_name=row["screen_name"],
                     profile_url=row["profile_url"],
@@ -159,7 +161,6 @@ def run():
     saveTopicToDB("./files/topic.csv")
     saveTrendToDB("./files/searchTrend.csv")
     saveDetailToDB("./files/test.csv")
-    saveCommentsToDB("./files/comments.csv")
 
 
-run()
+# run()e

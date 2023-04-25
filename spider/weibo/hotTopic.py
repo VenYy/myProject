@@ -177,7 +177,7 @@ def run():
     res = []
 
     for i in range(0, len(data), batchSize):
-        batchData = data[i:i+batchSize]
+        batchData = data[i:i + batchSize]
         thread = DetailThread(batchData, res)
         index += 1
         detailThreads.append(thread)
@@ -187,7 +187,6 @@ def run():
     with open("./files/tmp.json", "w", encoding="utf-8") as f:
         json.dump({"data": res}, f)
     saveCSV(data)
-
 
     # saveCSV(data)
     # print("Saving hotTopic....")
