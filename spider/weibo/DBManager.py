@@ -206,12 +206,12 @@ class Comment(Base):
     text = Column(Text(collation='utf8mb4_unicode_ci'))
     like_count = Column(Integer)
     mid = Column(ForeignKey('topicDetail.mid'), nullable=False, index=True)
-
+    topic_name = Column(String(32))
     topicDetail = relationship('TopicDetail')
 
 
     def __init__(self, comment_id, screen_name=None, profile_url=None, source=None,
-                 created_at=None, text_=None, like_count=None, mid=None):
+                 created_at=None, text_=None, like_count=None, mid=None, topic_name=None):
         self.comment_id = comment_id
         self.screen_name = screen_name
         self.profile_url = profile_url
@@ -220,3 +220,4 @@ class Comment(Base):
         self.text = text_
         self.like_count = like_count
         self.mid = mid
+        self.topic_name = topic_name

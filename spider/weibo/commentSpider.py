@@ -68,8 +68,9 @@ def get_urls(url: list, headers: dict) -> list:
 
 
 # 获取评论数据
-def get_comments(url_list: list) -> list:
+def get_comments(url_list: list, key: str) -> list:
     '''
+    :param key: 话题名称
     :param url_list: 最终需要获取的数据来源，来自get_urls()
     :return: comments_data
     '''
@@ -97,7 +98,8 @@ def get_comments(url_list: list) -> list:
                         "created_at": datetime.strptime(j["created_at"], '%a %b %d %H:%M:%S %z %Y'),
                         "text": filter_emoji(j["text"]),
                         "like_count": j["like_count"],
-                        "mid": mid
+                        "mid": mid,
+                        "topic_name": key
                     }
                     comments_data.append(dic)
 
@@ -131,7 +133,8 @@ def saveCommentsToDB(path: str) -> None:
                     created_at=row["created_at"],  # 评论发布时间
                     text_=row["text"],  # 正文
                     like_count=row["like_count"],  # 点赞数
-                    mid=row["mid"]  # 对应的文章的ID
+                    mid=row["mid"],  # 对应的文章的ID
+                    topic_name=row["topic_name"]
                 )
                 db.add_data(comments)
                 db.session.commit()
@@ -154,13 +157,13 @@ if __name__ == '__main__':
     start_time = time.time()
 
     words = db.session.execute(text(
-        "select distinct word from topic order by timeStamp desc limit 50;"
+        "select distinct word from topic where mention > 3000 order by timeStamp desc;"
     )).fetchall()
     count = 1
     for word in words:
         key = word[0]
         urls = get_base_url(key)
-        print(f"正在获取话题：{key}的评论数据，剩余：{len(words) - count}")
+        print(f"正在获取话题：“{key}”的评论数据，剩余：{len(words) - count}")
         count += 1
         url_list = []
         for url, mid in urls:
@@ -169,14 +172,14 @@ if __name__ == '__main__':
                               "Safari/537.36",
                 "cookie": "WEIBOCN_FROM=1110006030; SUB=_2A25JQ1_SDeRhGeBK7VoU8izJwziIHXVqzGGarDV6PUJbkdB"
                           "-LWPCkW1NR5N03I0DfRwuFR-ea9npqpQaYuHL0KA2;"
-                          "_T_WM=67285126995; MLOGIN=1; XSRF-TOKEN=56c53c; "
-                          "mweibo_short_token=2cd2eef66f;"
+                          "_T_WM=67285126995; MLOGIN=1; XSRF-TOKEN=da69ca; "
+                          # "mweibo_short_token=2cd2eef66f;"
                           "M_WEIBOCN_PARAMS=oid={mid}&luicode=20000061&lfid={mid}&uicode=20000061&fid;"
                           "={mid}".format(mid=mid)
             }
             url_list.extend(get_urls(url, headers))
         print(url_list)
-        comments_data = get_comments(url_list)
+        comments_data = get_comments(url_list, key)
 
         comments_spider.saveAsCSV("./files/comments.csv",
                                   ["comment_id",
@@ -192,5 +195,5 @@ if __name__ == '__main__':
 
         saveCommentsToDB("./files/comments.csv")
 
-        end_time = time.time()
+    end_time = time.time()
     print("共耗时：", end_time - start_time)
