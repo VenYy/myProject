@@ -218,7 +218,6 @@ def get_hotSearch_bar():
         href.append(i[3])
         timeStamp.append(i[4])
     data = {"word": word, "hot": hot, "href": href, "timeStamp": timeStamp}
-    print(data)
 
     c = hotSearch_bar(data)
     return c.dump_options_with_quotes()

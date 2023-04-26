@@ -172,6 +172,13 @@ class TopicDetail(Base):
     text = Column(String(collation='utf8mb4_unicode_ci'))
     timeStamp = Column(DateTime)
 
+    def __repr__(self):
+        return f"TopicDetail(mid={self.mid}, " \
+               f"detail_url={self.detail_url}, " \
+               f"screen_name={self.screen_name}, " \
+               f"uid={self.uid})," \
+               f"topic_name={self.topic_name}"
+
     def __init__(self, mid, detail_url="",
                  screen_name="", uid="", gender="未知", profile_url="",
                  followers_count="", status_province="",
@@ -201,6 +208,7 @@ class Comment(Base):
     comment_id = Column(String(16, 'utf8mb4_unicode_ci'), primary_key=True)
     screen_name = Column(String(32, 'utf8mb4_unicode_ci'))
     profile_url = Column(Text(collation='utf8mb4_unicode_ci'))
+    gender = Column(String(5))
     source = Column(String(10, 'utf8mb4_unicode_ci'))
     created_at = Column(DateTime)
     text = Column(Text(collation='utf8mb4_unicode_ci'))
@@ -209,15 +217,20 @@ class Comment(Base):
     topic_name = Column(String(32))
     topicDetail = relationship('TopicDetail')
 
+    def __repr__(self):
+        return f"comment_id: {self.comment_id}, " \
+               f"screen_name: {self.screen_name}, " \
+               f"created_at: {self.created_at}" \
+               f"topic_name: {self.topic_name}"
 
-    def __init__(self, comment_id, screen_name=None, profile_url=None, source=None,
-                 created_at=None, text_=None, like_count=None, mid=None, topic_name=None):
-        self.comment_id = comment_id
-        self.screen_name = screen_name
-        self.profile_url = profile_url
-        self.source = source
-        self.created_at = created_at
-        self.text = text_
-        self.like_count = like_count
-        self.mid = mid
-        self.topic_name = topic_name
+    def __init__(self, **data):
+        self.comment_id = data.get('comment_id')
+        self.screen_name = data.get('screen_name')
+        self.profile_url = data.get('profile_url')
+        self.gender = data.get("gender")
+        self.source = data.get('source')
+        self.created_at = data.get('created_at')
+        self.text = data.get('text')
+        self.like_count = data.get('like_count')
+        self.mid = data.get('mid')
+        self.topic_name = data.get('topic_name')

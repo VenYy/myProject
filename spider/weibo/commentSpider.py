@@ -94,6 +94,7 @@ def get_comments(url_list: list, key: str) -> list:
                         "comment_id": j["id"],
                         "screen_name": j["user"]["screen_name"],
                         "profile_url": j["user"]["profile_url"],
+                        "gender": {"f": "女", "m": "男"}.get(j["user"]["gender"], "未知"),
                         "source": j["source"].lstrip("来自"),
                         "created_at": datetime.strptime(j["created_at"], '%a %b %d %H:%M:%S %z %Y'),
                         "text": filter_emoji(j["text"]),
@@ -101,6 +102,7 @@ def get_comments(url_list: list, key: str) -> list:
                         "mid": mid,
                         "topic_name": key
                     }
+
                     comments_data.append(dic)
 
         except Exception as e:
@@ -115,51 +117,76 @@ def saveCommentsToDB(path: str) -> None:
     :param path: 评论数据csv文件路径
     :return: None
     '''
+    insert_rows = []
+    update_rows = []
     with open(path, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        insertCount = 0  # 累计添加数量
-        updateCount = 0  # 累计更改数量
-        for row in reader:
-            '''
-            判断是否需要新增或更改数据
-            '''
-            existing_record = db.session.query(Comment).filter_by(comment_id=row["comment_id"]).first()
-            if existing_record is None:
-                comments = Comment(
-                    comment_id=row["comment_id"],  # 评论ID
-                    screen_name=row["screen_name"],  # 发布者昵称
-                    profile_url=row["profile_url"],  # 个人主页
-                    source=row["source"],  # 发布者所在地
-                    created_at=row["created_at"],  # 评论发布时间
-                    text_=row["text"],  # 正文
-                    like_count=row["like_count"],  # 点赞数
-                    mid=row["mid"],  # 对应的文章的ID
-                    topic_name=row["topic_name"]
-                )
-                db.add_data(comments)
-                db.session.commit()
-                insertCount += 1
-            else:
-                update_required = False
-                if existing_record.like_count != row["like_count"]:
-                    existing_record.like_count = row["like_count"]
-                    update_required = True
-                if update_required:
-                    print(f"Updating: ", existing_record.comment_id)
-                    db.session.commit()
-                    updateCount += 1
+        # rows = [literal_eval(row) for row in reader]
 
-        print(f"comments表共更新了{updateCount}条数据")
-        print(f"comments表共新增了{insertCount}条数据")
+        # 将评论数据分成需要插入的和需要更新的两部分
+
+        for row in reader:
+            existing_record = db.session.query(Comment).filter_by(comment_id=row["comment_id"]).first()
+            # 不存在当前行的comments_id，则将当前行添加至数据库
+            if existing_record is None:
+                insert_rows.append(row)
+            else:
+                # 否则判断是否需要更新数据操作
+                try:
+                    if existing_record.like_count != row["like_count"]:
+                        existing_record.like_count = row["like_count"]
+                        update_rows.append({
+                            "comment_id": existing_record.comment_id,
+                            "like_count": row["like_count"]
+                        })
+                    if existing_record.gender != row["gender"]:
+                        existing_record.gender = row["gender"]
+                        update_rows.append({
+                            "comment_id": existing_record.comment_id,
+                            "gender": row["gender"]
+                        })
+                except Exception as e:
+                    print(e)
+                    continue
+
+    # bulk_insert_mappings() 方法是用于批量插入数据的方法。
+    # 它可以将一个由字典对象组成的列表一次性插入到数据库中，从而提高插入数据的效率
+
+    print(insert_rows)
+    print(update_rows)
+
+    try:
+        # 批量插入新评论数据
+        if insert_rows:
+            db.session.bulk_insert_mappings(Comment, insert_rows)
+            db.session.commit()
+
+        # 批量更新已存在的评论数据
+        if update_rows:
+            db.session.bulk_update_mappings(Comment, update_rows)
+            db.session.commit()
+    except Exception as e:
+        print(e)
+        pass
+
+    # 输出插入和更新的数量
+    insertCount = len(insert_rows)
+    updateCount = len(update_rows)
+    print(f"Inserted: {insertCount}, Updated: {updateCount}")
 
 
 if __name__ == '__main__':
     start_time = time.time()
 
+    # 回滚之前未提交的事务并关闭数据库连接
+    db.session.rollback()
+    db.session.close_all()
+
     words = db.session.execute(text(
         "select distinct word from topic where mention > 3000 order by timeStamp desc;"
     )).fetchall()
     count = 1
+    words = words[45:50]
     for word in words:
         key = word[0]
         urls = get_base_url(key)
@@ -170,12 +197,13 @@ if __name__ == '__main__':
             headers = {
                 "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 "
                               "Safari/537.36",
-                "cookie": "WEIBOCN_FROM=1110006030; SUB=_2A25JQ1_SDeRhGeBK7VoU8izJwziIHXVqzGGarDV6PUJbkdB"
-                          "-LWPCkW1NR5N03I0DfRwuFR-ea9npqpQaYuHL0KA2;"
-                          "_T_WM=67285126995; MLOGIN=1; XSRF-TOKEN=da69ca; "
-                          # "mweibo_short_token=2cd2eef66f;"
-                          "M_WEIBOCN_PARAMS=oid={mid}&luicode=20000061&lfid={mid}&uicode=20000061&fid;"
-                          "={mid}".format(mid=mid)
+                "cookie": "SSOLoginState=1682470171; ALF=1685062171; WEIBOCN_FROM=1110006030; "
+                          "SUB=_2A25JTPJtDeRhGeBK7VoU8izJwziIHXVqzp4lrDV6PUJbkdANLVHAkW1NR5N03G2"
+                          "-wVzRhnaNYrRd2MlqqnS0eBU-; _T_WM=47174926062; MLOGIN=1; XSRF-TOKEN=47414f; "
+                          "M_WEIBOCN_PARAMS=oid%3D{mid}%26luicode%3D20000061%26lfid=%3D{mid}"
+                          "%26uicode%3D20000061%26fid%3D{mid}; mweibo_short_token=cac3ff6a1c"
+                .format(mid=mid),
+                "sec-ch-ua": "'Google Chrome';v='111', 'Not(A:Brand';v='8', 'Chromium';v='111'"
             }
             url_list.extend(get_urls(url, headers))
         print(url_list)
@@ -185,6 +213,7 @@ if __name__ == '__main__':
                                   ["comment_id",
                                    "screen_name",
                                    "profile_url",
+                                   "gender",
                                    "source",
                                    "created_at",
                                    "text",

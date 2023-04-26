@@ -3,7 +3,7 @@ import sys
 
 from tqdm import tqdm
 import time
-from spider.weibo import hotTopic, analyse, hotSearch, searchTrend, topicDetail, commentSpiderM
+from spider.weibo import hotTopic, analyse, hotSearch, searchTrend, topicDetail
 
 if __name__ == '__main__':
     os.chdir("/media/venyy/Codes/project/spider/weibo/")
@@ -18,8 +18,6 @@ if __name__ == '__main__':
         hotSearch.run()
         searchTrend.run()
         analyse.run()
-
-        # commentSpiderM.run()
 
 
         end = time.time()
