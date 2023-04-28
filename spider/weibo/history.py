@@ -12,11 +12,14 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from sqlalchemy import text
 
-from spider.weibo.DBManager import TopicDetail
-from spider.weibo.analyse import db
+from spider.weibo.DBManager import TopicDetail, DBManager
+
 from spider.weibo.hotTopic import hotTopicSpider, saveCSV, filter_emoji
 
 os.chdir("/media/venyy/Codes/project/spider/weibo/")
+
+db = DBManager()
+
 
 data = db.session.execute(text(
     "select word,href from topic group by word;"

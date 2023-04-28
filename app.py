@@ -7,8 +7,11 @@ from flask import Flask, render_template, url_for, redirect, jsonify, request
 from pyecharts.charts import Bar, Timeline, Grid, Line, Pie, WordCloud
 from pyecharts import options
 from pyecharts.globals import ThemeType, SymbolType
+from sqlalchemy import distinct
+
 from spider.weibo.DBManager import *
 from spider.weibo.searchTrend import *
+from flask_paginate import *
 
 # from flask_cors import CORS
 
@@ -25,7 +28,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 """
 # 初始化db，关联flask项目
-db = DBManager()
+# db = DBManager()
 os.chdir("/media/venyy/Codes/project/")
 
 
@@ -203,10 +206,11 @@ def searchTrend():
 
 @app.route("/api/hotSearchData")
 def get_hotSearch_bar():
+    db = DBManager()
     # data = pd.read_csv("spider/weibo/files/hotSearch.csv", encoding="utf-8")
     result = db.session.execute(
         text("select * from hotSearch where timeStamp in (select max(timeStamp) from hotSearch)")).fetchall()
-    db.session.commit()
+    # db.session.commit()
     # data = [{"word": row[1], "hot": row[2], "href": row[3], "timeStamp": row[4]} for row in result]
     word = []
     hot = []
@@ -223,29 +227,58 @@ def get_hotSearch_bar():
     return c.dump_options_with_quotes()
 
 
-@app.route("/api/topicData")
+@app.route("/api/topicData", methods=["POST", "GET"])
 def topicData():
-    result = db.session.execute(text(
-        "select * from topic group by word having link is not null order by timeStamp desc;"
-    )).fetchall()
-    db.session.commit()
-    word = []
-    summary = []
-    read = []
-    mention = []
-    href = []
-    link = []
-    timeStamp = []
-    for i in result:
-        word.append(i[1])
-        summary.append(i[2])
-        read.append(i[3])
-        mention.append(i[4])
-        href.append(i[5])
-        link.append(i[7])
-        timeStamp.append(i[6])
-    data = {"word": word, "summary": summary, "read": read, "mention": mention, "href": href, "link": link, "timeStamp": timeStamp}
-    return data
+    db = DBManager()
+    # 获取请求参数
+    page = request.form.get("page", 1, type=int)
+
+    per_page = 40
+    start = (page - 1) * per_page
+    end = start + per_page
+
+    # 按时间降序排序查询，
+    datas = db.session.query(Topic).group_by(Topic.word).order_by(Topic.timeStamp.desc())
+    topics = datas[start:end]
+    total_count = datas.count()
+    print(total_count)
+    # try:
+    #     db.session.commit()
+    # except:
+    #     db.session.rollback()
+    #     raise
+    # finally:
+    #     db.session.close()
+
+    pagination = Pagination(page=page, per_page=40, total=total_count)
+    # 将查询结果转换为字典形式
+    data = {
+        "word": [],
+        "summary": [],
+        "read": [],
+        "mention": [],
+        "href": [],
+        "link": [],
+        "timeStamp": []
+    }
+
+    for topic in topics:
+        data['word'].append(topic.word)
+        data['summary'].append(topic.summary)
+        data['read'].append(topic.read)
+        data['mention'].append(topic.mention)
+        data['href'].append(topic.href)
+        data['link'].append(topic.link)
+        data['timeStamp'].append(str(topic.timeStamp))
+
+
+    result = {
+        "data": data,
+        "pagination": pagination.__dict__
+    }
+
+    return jsonify(**result)
+
 
 
 # 实现页面跳转
@@ -256,6 +289,7 @@ def hello_world():
 
 @app.route("/comments")
 def get_comments():
+    db = DBManager()
     data = db.session.execute(
         text("select * from comments")
     ).fetchall()
@@ -265,10 +299,11 @@ def get_comments():
 
 @app.route("/hotSearchPage", methods=["GET", "POST"])
 def hotSearchPage():
+    db = DBManager()
     d = db.session.execute(
         text(f"select * from searchTrend order by timestamp desc limit 10")
     )
-    db.session.commit()
+    # db.session.commit()
     if request.method == "POST":
         key = request.form["search"]
         if len(key) == 0:
@@ -277,7 +312,7 @@ def hotSearchPage():
             data = db.session.execute(
                 text(f"select * from searchTrend where word like '%{key}%'")
             ).fetchall()
-            db.session.commit()
+            # db.session.commit()
             return render_template("hotsearch.html", data=data)
     return render_template("hotsearch.html", data=d)
 
@@ -294,10 +329,11 @@ def othersPage():
 
 @app.route("/topic/api/<word>", methods=["POST", "GET"])
 def detailTopicApi(word):
+    db = DBManager()
     data = db.session.execute(
         text(f"select * from topicDetail where topic_name = '{word}'")
     ).fetchall()
-    db.session.commit()
+    # db.session.commit()
     result = []
 
     for i in data:

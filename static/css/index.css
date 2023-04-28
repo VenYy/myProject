@@ -24,7 +24,7 @@ body {
     font-size: 25px;
     font-weight: bold;
 
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid rgba(204, 204, 204, 0.24);
 
 }
 

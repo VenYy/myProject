@@ -2,14 +2,18 @@
 {% block head %}
     <!DOCTYPE html>
     <html lang="zh-CN">
+
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../static/css/index.css">
         <link rel="stylesheet" href="../static/css/topic.css">
         <script src="../static/js/jquery.min.js"></script>
         <script src="../static/js/echarts.min.js"></script>
+        <script src="../static/js/bootstrap.bundle.js"></script>
+
         <title>{% block title %}话题{% endblock %}</title>
     </head>
+
     <body>
 {% endblock %}
 
@@ -21,17 +25,35 @@
                 <button type="submit" onclick="search()">搜索</button>
             </div>
             <div class="filterBar">
-                <button onclick="sortMention()" class="filterButton">讨论量<span><img class="sortIcon" src="../static/images/sort.svg" alt=""></span></button>
-                <button onclick="sortRead()" class="filterButton">阅读量<span><img class="sortIcon" src="../static/images/sort.svg" alt=""></span></button>
-                <button onclick="sortTime()" class="filterButton">发布时间<span><img class="sortIcon" src="../static/images/sort.svg" alt=""></span></button>
+                <button onclick="sortMention()" class="filterButton">讨论量<span><img class="sortIcon"
+                                                                                      src="../static/images/sort.svg"
+                                                                                      alt=""></span></button>
+                <button onclick="sortRead()" class="filterButton">阅读量<span><img class="sortIcon"
+                                                                                   src="../static/images/sort.svg"
+                                                                                   alt=""></span></button>
+                <button onclick="sortTime()" class="filterButton">发布时间<span><img class="sortIcon"
+                                                                                     src="../static/images/sort.svg"
+                                                                                     alt=""></span></button>
             </div>
         </div>
+
+        <!-- 遮罩层 -->
+        <div class="modal" id="modal">
+            <!-- 弹出窗口 -->
+            <div class="container" id="container">这是一个弹出窗口</div>
+            <div class="close" id="closeBtn" onclick="closewindow()">X</div>
+
+
+        </div>
         <div class="topics"></div>
+
+
     </div>
 
     <script src="../static/js/showTopic.js"></script>
     <script src="../static/js/transfer.js">
     </script>
     </body>
+
     </html>
 {% endblock %}

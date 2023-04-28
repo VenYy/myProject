@@ -4,17 +4,22 @@ from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from sqlalchemy.engine.reflection import Inspector
 from datetime import datetime
 
+# 如果想禁用 SQLAlchemy 提供的数据库连接池，
+# 只需要在调用 create_engine 是指定连接池为 NullPool，SQLAlchemy 就会在执行 session.close() 后立刻断开数据库连接。
+# 当然，如果session 对象被析构但是没有被调用 session.close()，则数据库连接不会被断开，直到程序终止。
+from sqlalchemy.pool import NullPool
+
 Base = declarative_base()
 
 
 class DBManager:
     def __init__(self):
         # 连接数据库
-        self.engine = create_engine("mysql+pymysql://root:0226@127.0.0.1:3306/weibo?charset=utf8")
+        self.engine = create_engine("mysql+pymysql://root:0226@127.0.0.1:3306/weibo?charset=utf8", poolclass=NullPool)
         self.conn = self.engine.connect()
 
         # session用于创建程序与数据库之间的会话，所有对象的载入和保存(增删改查)都需要通过session
-        Session = sessionmaker(bind=self.engine)
+        Session = sessionmaker(bind=self.engine, expire_on_commit=False)
         self.session = Session()
         self.metadata = MetaData()
         self.metadata.reflect(bind=self.engine)
@@ -22,8 +27,13 @@ class DBManager:
     # 创建表
     def create_all(self):
         Base.metadata.create_all(self.engine)
-        self.session.commit()
-        self.session.close()
+        try:
+            self.session.commit()
+        except:
+            self.session.rollback()
+            raise
+        finally:
+            self.session.close()
 
     # 添加数据
     def add_data(self, data):
@@ -41,7 +51,14 @@ class DBManager:
     def get_data(self, tableName):
         table = Table(tableName, self.metadata, autoload_with=self.engine)
         topics = self.session.query(table).all()
-        self.session.close()
+        try:
+            self.session.commit()
+        except:
+            self.session.rollback()
+            raise
+        finally:
+            self.session.close()
+
         return topics
 
     # 判断表是否存在

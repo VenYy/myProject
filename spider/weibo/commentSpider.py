@@ -186,7 +186,7 @@ if __name__ == '__main__':
         "select distinct word from topic where mention > 3000 order by timeStamp desc;"
     )).fetchall()
     count = 1
-    words = words[45:50]
+    words = words[:25]
     for word in words:
         key = word[0]
         urls = get_base_url(key)
