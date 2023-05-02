@@ -7,28 +7,15 @@ from flask import Flask, render_template, url_for, redirect, jsonify, request
 from pyecharts.charts import Bar, Timeline, Grid, Line, Pie, WordCloud
 from pyecharts import options
 from pyecharts.globals import ThemeType, SymbolType
-from sqlalchemy import distinct
+from sqlalchemy import func, distinct
 
 from spider.weibo.DBManager import *
 from spider.weibo.searchTrend import *
 from flask_paginate import *
 
-# from flask_cors import CORS
 
 app = Flask(__name__)
-# 启用CORS允许跨域请求
-# CORS(app)
 
-"""
-DB_URI = "mysql+pymysql://root:0226@127.0.0.1:3306/weibo"
-app.config["SQLALCHEMY_DATABASE_URI"] = DB_URI
-# 是否追踪数据库修改
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-# 是否显示底层执行的SQL语句
-app.config["SQLALCHEMY_ECHO"] = True
-"""
-# 初始化db，关联flask项目
-# db = DBManager()
 os.chdir("/media/venyy/Codes/project/")
 
 
@@ -238,38 +225,20 @@ def topicData():
     end = start + per_page
 
     # 按时间降序排序查询，
-    datas = db.session.query(Topic).group_by(Topic.word).order_by(Topic.timeStamp.desc())
-    topics = datas[start:end]
-    total_count = datas.count()
-    print(total_count)
-    # try:
-    #     db.session.commit()
-    # except:
-    #     db.session.rollback()
-    #     raise
-    # finally:
-    #     db.session.close()
+    topics = db.session.query(Topic).group_by(Topic.word).order_by(Topic.timeStamp.desc())[start:end]
+    total_count = db.session.query(func.count(distinct(Topic.word))).scalar()
 
     pagination = Pagination(page=page, per_page=40, total=total_count)
     # 将查询结果转换为字典形式
     data = {
-        "word": [],
-        "summary": [],
-        "read": [],
-        "mention": [],
-        "href": [],
-        "link": [],
-        "timeStamp": []
+        "word": [topic.word for topic in topics],
+        "summary": [topic.summary for topic in topics],
+        "read": [topic.read for topic in topics],
+        "mention": [topic.mention for topic in topics],
+        "href": [topic.href for topic in topics],
+        "link": [topic.link for topic in topics],
+        "timeStamp": [topic.timeStamp for topic in topics]
     }
-
-    for topic in topics:
-        data['word'].append(topic.word)
-        data['summary'].append(topic.summary)
-        data['read'].append(topic.read)
-        data['mention'].append(topic.mention)
-        data['href'].append(topic.href)
-        data['link'].append(topic.link)
-        data['timeStamp'].append(str(topic.timeStamp))
 
 
     result = {
@@ -280,6 +249,41 @@ def topicData():
     return jsonify(**result)
 
 
+# 返回话题搜索的结果
+@app.route("/api/search", methods=["post", "GET"])
+def search():
+    db = DBManager()
+    # page = request.form.get("page", 1, type=int)
+    # per_page = 40
+    # start = (page-1) * per_page
+    # end = start + per_page
+    keyword = request.form.get("keyword")
+    datas = db.session.query(Topic).group_by(Topic.word).filter(Topic.word.like(f"%{keyword}%"))
+    # topics = datas[start:end]
+    # total_count = datas.count()
+
+    print(keyword)
+
+
+    data = {
+        "word": [topic.word for topic in datas],
+        "summary": [topic.summary for topic in datas],
+        "read": [topic.read for topic in datas],
+        "mention": [topic.mention for topic in datas],
+        "href": [topic.href for topic in datas],
+        "link": [topic.link for topic in datas],
+        "timeStamp": [topic.timeStamp for topic in datas]
+    }
+
+
+
+    # pagination = Pagination(page=page, per_page=40, total=total_count)
+    result = {
+        "data": data,
+        # "pagination": pagination.__dict__
+    }
+
+    return jsonify(**result)
 
 # 实现页面跳转
 @app.route('/', methods=["GET", "POST"])

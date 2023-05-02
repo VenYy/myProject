@@ -186,7 +186,7 @@ if __name__ == '__main__':
         "select distinct word from topic where mention > 3000 order by timeStamp desc;"
     )).fetchall()
     count = 1
-    words = words[:25]
+    words = words[:20]
     for word in words:
         key = word[0]
         urls = get_base_url(key)
@@ -197,11 +197,14 @@ if __name__ == '__main__':
             headers = {
                 "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 "
                               "Safari/537.36",
-                "cookie": "SSOLoginState=1682470171; ALF=1685062171; WEIBOCN_FROM=1110006030; "
-                          "SUB=_2A25JTPJtDeRhGeBK7VoU8izJwziIHXVqzp4lrDV6PUJbkdANLVHAkW1NR5N03G2"
-                          "-wVzRhnaNYrRd2MlqqnS0eBU-; _T_WM=47174926062; MLOGIN=1; XSRF-TOKEN=47414f; "
-                          "M_WEIBOCN_PARAMS=oid%3D{mid}%26luicode%3D20000061%26lfid=%3D{mid}"
-                          "%26uicode%3D20000061%26fid%3D{mid}; mweibo_short_token=cac3ff6a1c"
+                "cookie": "_T_WM=21471085550; XSRF-TOKEN=a52762; WEIBOCN_FROM=1110006030; "
+                          "mweibo_short_token=9d3f6316e8; "
+                          "SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5UsQWzFS7rHN-kXpM6N5vH5JpX5K-hUgL"
+                          ".FoMRe05c1h5Neoe2dJLoI79c9g44wHYt; SSOLoginState=1682994358; ALF=1685586358; MLOGIN=1; "
+                          "SCF=Ap1xha1wDXEMROVsZPqkRYk02OfrzUpAyhNjiuEBCsrBYZSddyrNvAa69GSPN4s0lYn6AvZhB_yvf2A4zS"
+                          "-2rU0.; "
+                          "SUB=_2A25JVATmDeRhGeFG6FIX-C7LyT-IHXVqtqyurDV6PUJbktANLUzGkW1NecZsSE9weuGviq8tgkvdwG4zpOUuhPAX;"
+                          "M_WEIBOCN_PARAMS=oid%3D{mid}%26luicode%3D20000061%26lfid%3D{mid}%26uicode%3D20000061%26fid%3D{mid}"
                 .format(mid=mid),
                 "sec-ch-ua": "'Google Chrome';v='111', 'Not(A:Brand';v='8', 'Chromium';v='111'"
             }
